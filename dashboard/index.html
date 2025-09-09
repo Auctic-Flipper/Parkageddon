@@ -2,12 +2,57 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Parkageddon</title>
+  <title>Parkageddon Dashboard</title>
+  <link rel="stylesheet" href="css/style.css">
   <link rel="icon" href="images/favicon.png" type="image/png">
-  <link rel="stylesheet" href="CSS/style.css">
 </head>
 <body>
-  <h1>Parking Dashboard</h1>
-  <script src="js/script.js"></script>
+  <header>
+    <nav>
+      <ul class="nav-bar">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="feedback.html">Feedback</a></li>
+        <li><a href="https://www.lipscomb.edu" target="_blank">Lipscomb University</a></li>
+        <li><a href="https://www.lipscomb.edu/engineering" target="_blank">Fields Engineering</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section class="intro">
+      <div class="branding">
+        <img src="images/logo.png" alt="Lipscomb University Logo" class="logo">
+        <img src="images/campus-overhead.png" alt="Overhead view of campus" class="campus-image">
+      </div>
+      <h1>Welcome to the Parkageddon Dashboard</h1>
+      <p>This dashboard provides real-time monitoring of the university parking garages. <strong>Click on an image below</strong> to navigate to the dashboard for a specific garage.</p>
+    </section>
+
+    <section class="garage-links">
+      <div class="garage">
+        <a href="garage-a.html">
+          <img src="images/garage-a.jpg" alt="Garage A" class="garage-img">
+        </a>
+        <p>Garage A</p>
+      </div>
+      <div class="garage">
+        <a href="garage-b.html">
+          <img src="images/garage-b.jpg" alt="Garage B" class="garage-img">
+        </a>
+        <p>Garage B</p>
+      </div>
+      <div class="garage">
+        <a href="garage-c.html">
+          <img src="images/garage-c.jpg" alt="Garage C" class="garage-img">
+        </a>
+        <p>Garage C</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Lipscomb University</p>
+  </footer>
 </body>
 </html>
