@@ -16,6 +16,14 @@
             color: gold;
             text-align: center;
             padding: 1rem;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        header.hidden {
+            opacity: 0;
+            visibility: hidden;
+            height: 0;
+            padding: 0;
+            overflow: hidden;
         }
         nav {
             display: flex;
@@ -23,6 +31,9 @@
             gap: 2rem;
             background-color: #5A2D81;
             padding: 0.5rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
         nav a {
             color: gold;
@@ -36,6 +47,7 @@
         main {
             padding: 2rem;
             text-align: center;
+            margin-bottom: 3rem; /* prevent content from being hidden by footer */
         }
         .logo-img {
             width: 350px;
@@ -55,6 +67,12 @@
         h1 {
             margin-top: 1rem;
         }
+        .welcome-title {
+            margin-top: 28rem; /* push Welcome text further down */
+        }
+        .welcome-sub {
+            margin-top: 2rem; /* add more space under Welcome h1 */
+        }
         .garage-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -67,16 +85,38 @@
             object-fit: cover;
             border: 2px solid #ccc;
         }
+        .garage-grid a {
+            text-decoration: none;
+            color: black;
+            font-weight: bold;
+            display: block;
+            text-align: center;
+            margin-top: 1rem;   /* more spacing from image */
+            font-size: 1.3rem;  /* larger font */
+        }
+        footer {
+            background-color: #5A2D81;
+            color: gold;
+            text-align: center;
+            padding: 0.5rem;
+            font-weight: bold;
+            font-size: 1.2rem; /* match nav size */
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+        }
     </style>
 </head>
 <body>
-    <header>
+    <header id="main-header">
         <h1>Parkageddon Dashboard</h1>
     </header>
     <nav>
-        <a href="#">Home</a>
-        <a href="#">About</a>
-        <a href="#">Feedback</a>
+        <a href="/home/wireless/Parkageddon/dashboard/index.html">Home</a>
+        <a href="/home/wireless/Parkageddon/dashboard/about.html">About</a>
+        <a href="/home/wireless/Parkageddon/dashboard/feedback.html">Feedback</a>
         <a href="https://lipscomb.edu/engineering">Fields</a>
         <a href="https://lipscomb.edu">Lipscomb University</a>
     </nav>
@@ -86,17 +126,40 @@
             <img src="Images/campus-overhead.png" alt="Aerial view of Lipscomb University campus" class="campus-img">
         </div>
 
-        <h1>Welcome to the Lipscomb University parking garage dashboard</h1>
-        <h3>
+        <h1 class="welcome-title">Welcome to the Lipscomb University parking garage dashboard:</h1>
+        <h3 class="welcome-sub">
             This dashboard provides real-time monitoring of the university parking garages.
             Click on an image below to navigate to the page for a specific garage. If you notice any errors,
-            then you are more than welcome to use the feedback form linked above.
+            then you are more than welcome to use the feedback form linked above. Support for parking lots may be added in the future.
+            Be sure to add this website to your bookmarks or home screen if on mobile for easy access.
         </h3>
         <div class="garage-grid">
-            <a href="/home/wireless/Parkageddon/dashboard/garage-a.html"><img src="Images/garage-a.jpg" alt="Fields Parking"> <strong>Fields Parking</strong></a>
-            <a href="#"><img src="Images/garage-b.jpg" alt="Hutson Marsh Griffith Tennis Center"><strong>Hutson Marsh Griffith Parking</strong></a>
-            <a href="#"><img src="Images/garage-c.png" alt="Entrance to Highrise Parking garage with a sign reading Purple Level Parking, cars parked inside."><strong>Highrise Parking</strong></a>
+            <a href="/home/wireless/Parkageddon/dashboard/garage-a.html">
+                <img src="Images/garage-a.jpg" alt="Fields Parking">
+                <strong>Fields Parking</strong>
+            </a>
+            <a href="/home/wireless/Parkageddon/dashboard/garage-b.html">
+                <img src="Images/garage-b.jpg" alt="Hutson Marsh Griffith Tennis Center">
+                <strong>Hutson Marsh Griffith Parking</strong>
+            </a>
+            <a href="/home/wireless/Parkageddon/dashboard/garage-c.html">
+                <img src="Images/garage-c.png" alt="Entrance to Highrise Parking garage with a sign reading Purple Level Parking, cars parked inside.">
+                <strong>Highrise Parking</strong>
+            </a>
         </div>
     </main>
+    <footer>
+        &copy; 2025 Lipscomb University
+    </footer>
+    <script>
+        const header = document.getElementById('main-header');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                header.classList.add('hidden');
+            } else {
+                header.classList.remove('hidden');
+            }
+        });
+    </script>
 </body>
 </html>
