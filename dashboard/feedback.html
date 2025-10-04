@@ -6,55 +6,76 @@
     <title>Feedback - Parkageddon Dashboard</title>
     <link rel="icon" type="image/png" href="Images/favicon.png">
     <style>
+        :root {
+            --primary: #5A2D81;
+            --accent: gold;
+            --card-bg: #fff;
+            --card-border: #ccc;
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box; /* includes padding/border in width */
+        }
+
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
+            background: #fafafa;
         }
+
         header {
-            background-color: #5A2D81;
-            color: gold;
+            background-color: var(--primary);
+            color: var(--accent);
             text-align: center;
             padding: 1rem;
         }
+
         nav {
             display: flex;
             justify-content: center;
             gap: 2rem;
-            background-color: #5A2D81;
+            background-color: var(--primary);
             padding: 0.5rem;
             position: sticky;
             top: 0;
             z-index: 1000;
         }
+
         nav a {
-            color: gold;
+            color: var(--accent);
             text-decoration: none;
             font-weight: bold;
             font-size: 1.2rem;
         }
+
         nav a:hover {
             text-decoration: underline;
         }
+
         main {
             padding: 2rem;
             text-align: center;
             margin-bottom: 3rem;
         }
+
         form {
             max-width: 600px;
             margin: 2rem auto;
             padding: 1.5rem;
-            background: #f4f4f4;
-            border: 1px solid #ccc;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
             border-radius: 8px;
             text-align: left;
         }
+
         label {
             display: block;
             margin-top: 1rem;
             font-weight: bold;
+            padding-right: 0.2rem; /* prevent touching form edge */
         }
+
         input, textarea {
             width: 100%;
             padding: 0.7rem;
@@ -63,9 +84,10 @@
             border-radius: 5px;
             font-size: 1rem;
         }
+
         button {
-            background-color: #5A2D81;
-            color: gold;
+            background-color: var(--primary);
+            color: var(--accent);
             font-size: 1.1rem;
             font-weight: bold;
             padding: 0.7rem 1.5rem;
@@ -74,12 +96,14 @@
             border-radius: 5px;
             cursor: pointer;
         }
+
         button:hover {
             background-color: #4b236a;
         }
+
         footer {
-            background-color: #5A2D81;
-            color: gold;
+            background-color: var(--primary);
+            color: var(--accent);
             text-align: center;
             padding: 0.5rem;
             font-weight: bold;
@@ -96,6 +120,7 @@
     <header>
         <h1>Parkageddon Dashboard</h1>
     </header>
+
     <nav>
         <a href="index.html">Home</a>
         <a href="about.html">About</a>
@@ -103,9 +128,11 @@
         <a href="https://lipscomb.edu/engineering">Fields</a>
         <a href="https://lipscomb.edu">Lipscomb University</a>
     </nav>
+
     <main>
         <h2>Feedback Form</h2>
         <p>We’d love to hear your thoughts! Please fill out the form below.</p>
+
         <form action="https://formspree.io/f/xkgqrekj" method="POST">
             <label for="name">Your Name:</label>
             <input type="text" id="name" name="name" required>
@@ -122,6 +149,7 @@
             <button type="submit">Send Feedback</button>
         </form>
     </main>
+
     <footer>
         &copy; 2025 Lipscomb University
     </footer>
