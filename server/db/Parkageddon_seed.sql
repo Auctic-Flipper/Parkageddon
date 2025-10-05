@@ -22,8 +22,8 @@ WHERE g.name = 'Hutson Marsh Griffith Parking'
 ON CONFLICT DO NOTHING;
 
 -- Insert named floors for Highrise Parking
-INSERT INTO floors (garage_id, floor_number)
-SELECT g.garage_id, fnum
+INSERT INTO floors (garage_id, floor_number, floor_name)
+SELECT g.garage_id, fnum, fname
 FROM garages g
 JOIN (VALUES
     (1, 'Green'),
@@ -34,19 +34,9 @@ JOIN (VALUES
 WHERE g.name = 'Highrise Parking'
 ON CONFLICT DO NOTHING;
 
--- Optional: add a column for named floors if you want both number + name
-ALTER TABLE floors ADD COLUMN IF NOT EXISTS floor_name VARCHAR(50);
-
--- Update Highrise floors with names
-UPDATE floors f
-SET floor_name = fname
-FROM garages g
-JOIN (VALUES
-    (1, 'Green'),
-    (2, 'Purple'),
-    (3, 'Blue'),
-    (4, 'Gold')
-) AS mapping(fnum, fname)
-  ON f.floor_number = mapping.fnum
-WHERE f.garage_id = g.garage_id
-  AND g.name = 'Highrise Parking';
+-- Seed floor_status with base values (0 total, 0 free) for all floors
+INSERT INTO floor_status (floor_id, vehicle_type, total_spots, free_spots)
+SELECT f.floor_id, v.vehicle_type, 0, 0
+FROM floors f
+CROSS JOIN (VALUES ('car'), ('motorcycle')) AS v(vehicle_type)
+ON CONFLICT DO NOTHING;
