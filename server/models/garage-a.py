@@ -1,64 +1,53 @@
-# garage_a.py
+import os
 from flask import Flask, render_template
-import psycopg2
-import psycopg2.extras
+from sqlalchemy import func
+from dotenv import load_dotenv
+
+from schemas import db, Garage, Floor, FloorStatus
+
+# Load environment variables
+load_dotenv()
 
 app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DATABASE_URL")
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-# Adjust with your actual database credentials
-DB_CONFIG = {
-    "dbname": "parkageddon",
-    "user": "postgres",
-    "password": "yourpassword",
-    "host": "localhost",
-    "port": 5432,
-}
-
-def get_db_connection():
-    return psycopg2.connect(**DB_CONFIG)
+# Initialize db with app
+db.init_app(app)
 
 @app.route("/garage-a")
 def garage_a_dashboard():
-    conn = get_db_connection()
-    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    garage = Garage.query.filter_by(name="Fields Parking").first()
 
-    # Query total free cars and motorcycles for Fields Parking
-    cur.execute("""
-        SELECT fs.vehicle_type, SUM(fs.free_spots) AS free
-        FROM floor_status fs
-        JOIN floors f ON fs.floor_id = f.floor_id
-        JOIN garages g ON f.garage_id = g.garage_id
-        WHERE g.name = 'Fields Parking'
-        GROUP BY fs.vehicle_type;
-    """)
-    totals = {row["vehicle_type"]: row["free"] for row in cur.fetchall()}
+    # Totals
+    totals = (
+        db.session.query(FloorStatus.vehicle_type, func.sum(FloorStatus.free_spots))
+        .join(Floor)
+        .filter(Floor.garage_id == garage.garage_id)
+        .group_by(FloorStatus.vehicle_type)
+        .all()
+    )
+    totals_dict = {t[0]: t[1] for t in totals}
 
-    # Query per-floor breakdown
-    cur.execute("""
-        SELECT f.floor_number, fs.vehicle_type, fs.free_spots
-        FROM floor_status fs
-        JOIN floors f ON fs.floor_id = f.floor_id
-        JOIN garages g ON f.garage_id = g.garage_id
-        WHERE g.name = 'Fields Parking'
-        ORDER BY f.floor_number;
-    """)
+    # Per-floor
+    floor_statuses = (
+        db.session.query(Floor.floor_number, FloorStatus.vehicle_type, FloorStatus.free_spots)
+        .join(FloorStatus, Floor.floor_id == FloorStatus.floor_id)
+        .filter(Floor.garage_id == garage.garage_id)
+        .order_by(Floor.floor_number)
+        .all()
+    )
+
     floor_data = {}
-    for row in cur.fetchall():
-        floor = row["floor_number"]
-        if floor not in floor_data:
-            floor_data[floor] = {"car": 0, "motorcycle": 0}
-        floor_data[floor][row["vehicle_type"]] = row["free_spots"]
+    for floor_number, vehicle_type, free_spots in floor_statuses:
+        if floor_number not in floor_data:
+            floor_data[floor_number] = {"car": 0, "motorcycle": 0}
+        floor_data[floor_number][vehicle_type] = free_spots
 
-    cur.close()
-    conn.close()
-
-    # Map values into template variables
     context = {
-        "total_cars": totals.get("car", 0),
-        "total_motorcycles": totals.get("motorcycle", 0),
+        "total_cars": totals_dict.get("car", 0),
+        "total_motorcycles": totals_dict.get("motorcycle", 0),
 
-        # Floor 1: example splitting into faculty/student
-        # For now, assume half faculty / half student until you add more logic
         "floor1_cars_faculty": floor_data.get(1, {}).get("car", 0) // 2,
         "floor1_cars_student": floor_data.get(1, {}).get("car", 0) - (floor_data.get(1, {}).get("car", 0) // 2),
         "floor1_motorcycles": floor_data.get(1, {}).get("motorcycle", 0),
@@ -73,4 +62,6 @@ def garage_a_dashboard():
     return render_template("garage-a.html", **context)
 
 if __name__ == "__main__":
+    with app.app_context():
+        db.create_all()  # Ensure tables exist
     app.run(debug=True)
