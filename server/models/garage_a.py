@@ -14,6 +14,8 @@ bp = Blueprint('garage_a', __name__, url_prefix='/garage-a')
 @bp.route("/")
 def garage_a_dashboard():
     garage = Garage.query.filter_by(name="Fields Parking").first()
+    if not garage:
+        return "Garage 'Fields Parking' not found. Run the seed or insert it.", 404
 
     # Totals
     totals = (
