@@ -3,7 +3,7 @@ import os
 from flask import Flask
 from dotenv import load_dotenv
 
-from schemas import db  # your models live here
+from models.schemas import db  # your models live here
 import garage_a         # this imports your garage_a routes
 
 # Load environment variables from .env
@@ -27,3 +27,4 @@ if __name__ == "__main__":
     with app.app_context():
         db.create_all()  # ensure tables exist
     app.run(debug=True)
+
