@@ -1,5 +1,5 @@
 import os
-from flask import Flask, render_template
+from flask import Blueprint, render_template
 from sqlalchemy import func
 from dotenv import load_dotenv
 
@@ -8,14 +8,10 @@ from models.schemas import db, Garage, Floor, FloorStatus
 # Load environment variables
 load_dotenv()
 
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DATABASE_URL")
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+# Create the Blueprint (instead of a full Flask app)
+bp = Blueprint('garage_a', __name__, url_prefix='/garage-a')
 
-# Initialize db with app
-db.init_app(app)
-
-@app.route("/garage-a")
+@bp.route("/")
 def garage_a_dashboard():
     garage = Garage.query.filter_by(name="Fields Parking").first()
 
@@ -60,8 +56,3 @@ def garage_a_dashboard():
     }
 
     return render_template("garage-a.html", **context)
-
-if __name__ == "__main__":
-    with app.app_context():
-        db.create_all()  # Ensure tables exist
-    app.run(debug=True)
