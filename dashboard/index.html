@@ -1,24 +1,112 @@
-<!-- Replace the existing <nav> block with this -->
-<nav>
-    <a href="/">Home</a>
-    <a href="/about">About</a>
-    <a href="/feedback">Feedback</a>
-    <a href="https://lipscomb.edu/engineering">Fields</a>
-    <a href="https://lipscomb.edu">Lipscomb University</a>
-</nav>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parkageddon Dashboard</title>
+    <link rel="icon" type="image/png" href="Images/favicon.png">
+    <style>
+        :root {
+            --primary: #5A2D81; /* Lipscomb Purple */
+            --accent: gold;
+            --body-font: Arial, sans-serif;
+            --container-max: 1100px;
+            --muted: #444;
+            --card-bg: #fff;
+            --card-border: #e6e6e6;
+        }
 
-<!-- In the garage grid, replace the three anchors with these -->
-<div class="garage-grid">
-    <a href="/garage-a/">
-        <img src="Images/garage-a.jpg" alt="Fields Parking">
-        <strong>Fields Parking</strong>
-    </a>
-    <a href="/garage-b/">
-        <img src="Images/garage-b.jpg" alt="Hutson Marsh Griffith Tennis Center">
-        <strong>Hutson Marsh Griffith Parking</strong>
-    </a>
-    <a href="/garage-c/">
-        <img src="Images/garage-c.png" alt="Entrance to Highrise Parking garage with a sign reading Purple Level Parking, cars parked inside.">
-        <strong>Highrise Parking</strong>
-    </a>
-</div>
+        *, *::before, *::after { box-sizing: border-box; }
+
+        html, body { height: 100%; margin: 0; padding: 0; font-family: var(--body-font); color: #111; background: #fafafa; }
+
+        header { background-color: var(--primary); color: var(--accent); text-align: center; padding: 1rem; transition: opacity .3s ease, visibility .3s ease, height .3s ease, padding .3s ease; }
+        header h1 { color: var(--accent); margin: 0; }
+        header.hidden { opacity: 0; visibility: hidden; height: 0; padding: 0; overflow: hidden; }
+
+        nav { display: flex; justify-content: center; gap: 2rem; background: var(--primary); padding: 0.5rem; position: sticky; top: 0; z-index: 1000; }
+        nav a { color: var(--accent); font-weight: bold; text-decoration: none; font-size: 1.05rem; }
+        nav a:hover { text-decoration: underline; }
+
+        main { max-width: var(--container-max); margin: 2rem auto; padding: 1rem; padding-bottom: 3rem; }
+
+        .image-row { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 1rem; margin-bottom: 2rem; }
+        .image-row img { max-width: 100%; height: auto; border-radius: 4px; }
+
+        .logo-img { flex: 0 0 auto !important; max-width: 220px !important; width: 100%; height: auto !important; margin: 20px auto !important; display: block; border-radius: 8px; transition: transform 0.25s ease-in-out; }
+        .logo-img:hover { transform: scale(1.05); }
+        .campus-img { flex: 2 1 600px; max-width: 100%; }
+
+        .welcome-title { margin-top: 1rem; color: var(--primary); }
+        .welcome-sub { margin-top: 1rem; line-height: 1.5; max-width: 900px; margin-left: auto; margin-right: auto; }
+
+        .garage-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; margin-top: 2rem; }
+        .garage-grid a { display: flex; flex-direction: column; align-items: center; text-decoration: none; color: inherit; }
+        .garage-grid img { width: 100%; height: 300px; object-fit: cover; border: 2px solid #ccc; border-radius: 6px; transition: border-color 0.2s ease, transform 0.2s ease; }
+        .garage-grid a:hover img { border-color: var(--accent); transform: scale(1.03); }
+        .garage-grid a strong { margin-top: 0.75rem; color: var(--primary); }
+
+        footer { background-color: var(--primary); color: var(--accent); text-align: center; padding: 0.5rem; font-weight: bold; font-size: 1.1rem; position: fixed; bottom: 0; left: 0; width: 100%; z-index: 1000; }
+    </style>
+</head>
+<body>
+    <header id="main-header">
+        <h1>Parkageddon Dashboard</h1>
+    </header>
+
+    <nav>
+        <a href="/">Home</a>
+        <a href="/about">About</a>
+        <a href="/feedback">Feedback</a>
+        <a href="https://lipscomb.edu/engineering" target="_blank" rel="noopener">Fields</a>
+        <a href="https://lipscomb.edu" target="_blank" rel="noopener">Lipscomb University</a>
+    </nav>
+
+    <main>
+        <div class="image-row">
+            <img src="Images/logo.png" alt="Lipscomb University Logo" class="logo-img">
+            <img src="Images/campus-overhead.png" alt="Aerial view of Lipscomb University campus" class="campus-img">
+        </div>
+
+        <h1 class="welcome-title">Welcome to the Lipscomb University parking garage dashboard:</h1>
+        <h3 class="welcome-sub">
+            This dashboard provides real-time monitoring of the university parking garages.
+            Click on an image below to navigate to the page for a specific garage. If you notice any errors,
+            you are welcome to use the feedback form linked above. Support for parking lots may be added in the future.
+            Be sure to add this website to your bookmarks or home screen if on mobile for easy access.
+        </h3>
+
+        <div class="garage-grid">
+            <a href="/garage-a/">
+                <img src="Images/garage-a.jpg" alt="Fields Parking">
+                <strong>Fields Parking</strong>
+            </a>
+            <a href="/garage-b/">
+                <img src="Images/garage-b.jpg" alt="Hutson Marsh Griffith Tennis Center">
+                <strong>Hutson Marsh Griffith Parking</strong>
+            </a>
+            <a href="/garage-c/">
+                <img src="Images/garage-c.png" alt="Entrance to Highrise Parking garage with a sign reading Purple Level Parking, cars parked inside.">
+                <strong>Highrise Parking</strong>
+            </a>
+        </div>
+    </main>
+
+    <footer>
+        &copy; 2025 Lipscomb University
+    </footer>
+
+    <script>
+        const header = document.getElementById('main-header');
+        function toggleHeader() {
+            if (window.scrollY > 50) {
+                header.classList.add('hidden');
+            } else {
+                header.classList.remove('hidden');
+            }
+        }
+        window.addEventListener('scroll', toggleHeader);
+        window.addEventListener('load', toggleHeader);
+    </script>
+</body>
+</html>
