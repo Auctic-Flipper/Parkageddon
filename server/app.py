@@ -5,13 +5,15 @@ from dotenv import load_dotenv
 
 from models.schemas import db
 from models import garage_a
-from models import garage_b  # NEW
+from models import garage_b
+from models import garage_c  # NEW
 
 # Load environment variables from .env
 load_dotenv()
 
 def create_app():
     # Use the dashboard folder for templates and static files
+    # Serves /Images/... etc. from the same folder so existing paths work
     app = Flask(
         __name__,
         template_folder="../dashboard",
@@ -27,7 +29,8 @@ def create_app():
 
     # Register routes
     app.register_blueprint(garage_a.bp)
-    app.register_blueprint(garage_b.bp)  # NEW
+    app.register_blueprint(garage_b.bp)
+    app.register_blueprint(garage_c.bp)  # NEW
 
     return app
 
