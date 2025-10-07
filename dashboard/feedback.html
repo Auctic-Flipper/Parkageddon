@@ -11,109 +11,32 @@
             --accent: gold;
             --card-bg: #fff;
             --card-border: #ccc;
+            --muted: #444;
         }
 
-        *, *::before, *::after {
-            box-sizing: border-box; /* includes padding/border in width */
-        }
+        *, *::before, *::after { box-sizing: border-box; }
 
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background: #fafafa;
-        }
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #fafafa; color:#111; }
 
-        header {
-            background-color: var(--primary);
-            color: var(--accent);
-            text-align: center;
-            padding: 1rem;
-        }
+        header { background-color: var(--primary); color: var(--accent); text-align: center; padding: 1rem; }
+        header h1 { margin: 0; color: var(--accent); }
 
-        nav {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            background-color: var(--primary);
-            padding: 0.5rem;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
+        nav { display: flex; justify-content: center; gap: 2rem; background-color: var(--primary); padding: 0.5rem; position: sticky; top: 0; z-index: 1000; }
+        nav a { color: var(--accent); text-decoration: none; font-weight: bold; font-size: 1.1rem; }
+        nav a:hover { text-decoration: underline; }
 
-        nav a {
-            color: var(--accent);
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 1.2rem;
-        }
+        main { padding: 2rem; text-align: center; margin-bottom: 3rem; }
 
-        nav a:hover {
-            text-decoration: underline;
-        }
+        .intro { max-width: 800px; margin: 0 auto; color: var(--muted); }
 
-        main {
-            padding: 2rem;
-            text-align: center;
-            margin-bottom: 3rem;
-        }
+        form { max-width: 600px; margin: 2rem auto; padding: 1.5rem; background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 8px; text-align: left; }
+        label { display: block; margin-top: 1rem; font-weight: bold; }
+        input, textarea { width: 100%; padding: 0.7rem; margin-top: 0.5rem; border: 1px solid #aaa; border-radius: 5px; font-size: 1rem; }
+        textarea { min-height: 140px; resize: vertical; }
+        button { background-color: var(--primary); color: var(--accent); font-size: 1.05rem; font-weight: bold; padding: 0.7rem 1.5rem; margin-top: 1rem; border: none; border-radius: 5px; cursor: pointer; }
+        button:hover { background-color: #4b236a; }
 
-        form {
-            max-width: 600px;
-            margin: 2rem auto;
-            padding: 1.5rem;
-            background: var(--card-bg);
-            border: 1px solid var(--card-border);
-            border-radius: 8px;
-            text-align: left;
-        }
-
-        label {
-            display: block;
-            margin-top: 1rem;
-            font-weight: bold;
-            padding-right: 0.2rem; /* prevent touching form edge */
-        }
-
-        input, textarea {
-            width: 100%;
-            padding: 0.7rem;
-            margin-top: 0.5rem;
-            border: 1px solid #aaa;
-            border-radius: 5px;
-            font-size: 1rem;
-        }
-
-        button {
-            background-color: var(--primary);
-            color: var(--accent);
-            font-size: 1.1rem;
-            font-weight: bold;
-            padding: 0.7rem 1.5rem;
-            margin-top: 1rem;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background-color: #4b236a;
-        }
-
-        footer {
-            background-color: var(--primary);
-            color: var(--accent);
-            text-align: center;
-            padding: 0.5rem;
-            font-weight: bold;
-            font-size: 1.2rem;
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            z-index: 1000;
-        }
+        footer { background-color: var(--primary); color: var(--accent); text-align: center; padding: 0.5rem; font-weight: bold; font-size: 1.1rem; position: fixed; bottom: 0; left: 0; width: 100%; z-index: 1000; }
     </style>
 </head>
 <body>
@@ -122,31 +45,30 @@
     </header>
 
     <nav>
-        <a href="index.html">Home</a>
-        <a href="about.html">About</a>
-        <a href="feedback.html">Feedback</a>
-        <a href="https://lipscomb.edu/engineering">Fields</a>
-        <a href="https://lipscomb.edu">Lipscomb University</a>
+        <a href="/">Home</a>
+        <a href="/about">About</a>
+        <a href="/feedback">Feedback</a>
     </nav>
 
     <main>
-        <h2>Feedback Form</h2>
-        <p>We’d love to hear your thoughts! Please fill out the form below.</p>
+        <div class="intro">
+            <p>
+                Have an idea, found an error, or want to suggest an improvement? We’d love to hear from you.
+                Fill out the form below and we’ll review your feedback.
+            </p>
+        </div>
 
-        <form action="https://formspree.io/f/xkgqrekj" method="POST">
-            <label for="name">Your Name:</label>
-            <input type="text" id="name" name="name" required>
+        <form action="/feedback" method="post" novalidate>
+            <label for="name">Your name</label>
+            <input type="text" id="name" name="name" placeholder="Jane Doe">
 
-            <label for="email">Your Email:</label>
-            <input type="email" id="email" name="email" required>
+            <label for="email">Your email</label>
+            <input type="email" id="email" name="email" placeholder="jane@example.com">
 
-            <label for="subject">Subject:</label>
-            <input type="text" id="subject" name="subject" required>
+            <label for="message">Your message</label>
+            <textarea id="message" name="message" placeholder="Share your thoughts..."></textarea>
 
-            <label for="message">Message:</label>
-            <textarea id="message" name="message" rows="6" required></textarea>
-
-            <button type="submit">Send Feedback</button>
+            <button type="submit">Send feedback</button>
         </form>
     </main>
 
