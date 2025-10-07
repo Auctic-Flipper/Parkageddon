@@ -27,9 +27,9 @@
 
         main { padding: 2rem; text-align: center; margin-bottom: 3rem; }
 
-        .intro { max-width: 800px; margin: 0 auto; color: var(--muted); }
+        .intro { max-width: 800px; margin: 0 auto 1rem; color: var(--muted); }
 
-        form { max-width: 600px; margin: 2rem auto; padding: 1.5rem; background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 8px; text-align: left; }
+        form { max-width: 600px; margin: 1rem auto; padding: 1.5rem; background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 8px; text-align: left; }
         label { display: block; margin-top: 1rem; font-weight: bold; }
         input, textarea { width: 100%; padding: 0.7rem; margin-top: 0.5rem; border: 1px solid #aaa; border-radius: 5px; font-size: 1rem; }
         textarea { min-height: 140px; resize: vertical; }
@@ -53,24 +53,28 @@
     </nav>
 
     <main>
-        <div class="intro">
-            <p>
-                Have an idea, found an error, or want to suggest an improvement? We’d love to hear from you.
-                Fill out the form below and we’ll review your feedback.
-            </p>
-        </div>
+        <h2>Feedback Form</h2>
+        <p>We’d love to hear your thoughts! Please fill out the form below.</p>
 
-        <form action="/feedback" method="post" novalidate>
-            <label for="name">Your name</label>
-            <input type="text" id="name" name="name" placeholder="Jane Doe">
+        <!-- Direct submit to Formspree (restored) -->
+        <form action="https://formspree.io/f/xkgqrekj" method="POST" accept-charset="UTF-8">
+            <!-- Optional subject line for emails -->
+            <input type="hidden" name="_subject" value="Parkageddon feedback">
 
-            <label for="email">Your email</label>
-            <input type="email" id="email" name="email" placeholder="jane@example.com">
+            <label for="name">Your Name:</label>
+            <input type="text" id="name" name="name" required autocomplete="name">
 
-            <label for="message">Your message</label>
-            <textarea id="message" name="message" placeholder="Share your thoughts..."></textarea>
+            <label for="email">Your Email:</label>
+            <input type="email" id="email" name="_replyto" required autocomplete="email">
 
-            <button type="submit">Send feedback</button>
+            <label for="message">Your Message:</label>
+            <textarea id="message" name="message" required placeholder="Share your thoughts..."></textarea>
+
+            <!-- Optional redirect back to your site after success
+            <input type="hidden" name="_redirect" value="http://localhost:5000/">
+            -->
+
+            <button type="submit">Send Feedback</button>
         </form>
     </main>
 
