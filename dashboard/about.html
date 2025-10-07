@@ -6,6 +6,7 @@
     <title>About — Parkageddon Dashboard</title>
     <link rel="icon" type="image/png" href="Images/favicon.png">
     <style>
+        /* Match the styling used on index.html for visual consistency */
         :root {
             --primary: #5A2D81; /* Lipscomb Purple */
             --accent: gold;
@@ -17,16 +18,14 @@
         }
 
         html,body { height: 100%; margin: 0; padding: 0; font-family: var(--body-font); color: #111; background: #fafafa; }
-        header { background-color: var(--primary); color: var(--accent); text-align: center; padding: 1rem; transition: opacity .3s ease, visibility .3s ease; }
-        header h1 { color: var(--accent); margin: 0; }
+        header { background-color: var(--primary); color: var(--accent); text-align: center; padding: 1rem; transition: opacity 0.3s ease, visibility 0.3s ease; }
+        header h1 { color: var(--accent); }
         header.hidden { opacity: 0; visibility: hidden; height: 0; padding: 0; overflow: hidden; }
-
         nav { display:flex; justify-content:center; gap:2rem; background: var(--primary); padding:0.5rem; position: sticky; top:0; z-index:1000; }
         nav a { color: var(--accent); font-weight:bold; text-decoration:none; font-size:1.05rem; }
         nav a:hover { text-decoration: underline; }
 
         main { max-width: var(--container-max); margin: 2rem auto; padding: 1rem; padding-bottom: 3rem; }
-
         .hero { background: linear-gradient(180deg, rgba(90,45,129,0.05), rgba(90,45,129,0.02)); border-radius:8px; padding:1.25rem; margin-bottom:1.25rem; border:1px solid var(--card-border); }
         h1 { margin: 0 0 0.25rem 0; color: var(--primary); }
         p.lead { margin:0; color: var(--muted); font-size:1.05rem; }
@@ -38,72 +37,136 @@
         .card h2 { margin-top: 0; color: var(--primary); }
         .muted { color: var(--muted); line-height:1.5; }
 
+        /* small architecture diagram (non-sensitive, purely illustrative) */
         .arch { display:flex; flex-direction:column; gap:.75rem; align-items:center; justify-content:center; padding:0.75rem; }
-        .arch span { display:inline-block; padding:.4rem .7rem; border:1px dashed var(--card-border); border-radius:6px; background:#fff; }
+        .arch .node { width: 100%; max-width: 320px; padding:0.6rem 0.8rem; border-radius:6px; border:1px solid var(--card-border); background:#fff; text-align:center; font-weight:600; color:#222; }
+        .arch .arrow { font-size:1.25rem; color:var(--muted); }
+
+        ul { margin:0.5rem 0 0 1.25rem; color:var(--muted); }
+        .small { font-size:0.92rem; color:var(--muted); }
+
+        footer { background-color: var(--primary); color: var(--accent); text-align:center; padding:0.5rem; font-weight:bold; font-size:1.1rem; position: fixed; bottom:0; left:0; width:100%; z-index:1000; }
+
+        /* button styling */
+        a.button { display:inline-block; background: var(--primary); color: var(--accent); padding:0.25rem 0.5rem; border-radius:32px; text-decoration:none; font-weight:bold; }
+
+        /* only for the contact button */
+        a.contact-button {
+            position: relative;
+            top: 3px;    /* move down */
+            left: 3px;   /* move right */
+        }
+
+        .credits { font-size:0.95rem; color:var(--muted); }
     </style>
 </head>
 <body>
     <header id="main-header">
-        <h1>About Parkageddon</h1>
+        <h1>Parkageddon Dashboard</h1>
     </header>
 
     <nav>
         <a href="/">Home</a>
-        <a href="/about">About</a>
-        <a href="/feedback">Feedback</a>
-        <a href="https://lipscomb.edu/engineering" target="_blank" rel="noopener">Fields</a>
-        <a href="https://lipscomb.edu" target="_blank" rel="noopener">Lipscomb University</a>
+        <a href="/about" aria-current="page">About</a>
+        <a href="/feedback">Submit Feedback</a>
+        <a href="https://lipscomb.edu/engineering">Fields</a>
+        <a href="https://lipscomb.edu">Lipscomb University</a>
     </nav>
 
-    <main>
-        <section class="hero">
-            <h1>Real-time visibility for campus parking</h1>
-            <p class="lead">Parkageddon aggregates and visualizes garage capacity to help students, faculty, and visitors find parking quickly.</p>
+    <main role="main" aria-labelledby="about-heading">
+        <section class="hero card" aria-hidden="false">
+            <h1 id="about-heading">About Parkageddon</h1>
+            <p class="lead">Parkageddon was developed by the Wireless Communications course at Lipscomb University to help students, faculty, and visitors locate available parking quickly and safely. The project combines campus telemetry, a lightweight web dashboard, and careful attention to usability and privacy.</p>
         </section>
 
-        <section class="grid">
-            <article class="card">
-                <h2>What is this?</h2>
-                <p class="muted">
-                    This dashboard shows the approximate number of available car and motorcycle spaces by floor for each garage on campus.
-                    It’s an early version and will continue to improve throughout the semester.
-                </p>
+        <div class="grid">
+            <div class="card" id="purpose">
+                <h2>What problem does it solve?</h2>
+                <p class="muted">On busy days the campus parking supply can be uncertain. Parkageddon gives a centralized, easy-to-use view of garage availability so drivers can choose a destination with confidence, reduce circling for parking, and lower traffic and emissions within the campus.</p>
 
-                <h2>Data sources</h2>
-                <p class="muted">
-                    Data is seeded for development and can be updated programmatically. Historical changes are stored for analysis over time.
-                </p>
+                <h2 style="margin-top:1rem;">Key features</h2>
+                <ul>
+                    <li>Real-time garage availability displayed per structure.</li>
+                    <li>Mobile-friendly dashboard for quick access on phones.</li>
+                    <li>Simple navigation to each garage's detail page and a feedback form for reporting problems.</li>
+                    <li>Designed with accessibility and progressive enhancement in mind.</li>
+                </ul>
+            </div>
 
-                <h2>Contributing</h2>
-                <p class="muted">
-                    Spot something off? Use the <a href="/feedback">feedback form</a> to report issues or suggest improvements.
-                </p>
-            </article>
+            <aside class="card" aria-labelledby="contributors-heading">
+                <h2 id="contributors-heading">Team & Credits</h2>
+                <p class="credits">Project lead: <strong>Dr. Kenneth Mayer</strong>.</p>
+                <p class="credits">Developed by a team of <strong>11 students</strong> majoring in Computer Science, Cybersecurity, Software Engineering, and related fields as part of the Wireless Communications class.</p>
 
-            <aside class="card">
-                <h2>Architecture (high level)</h2>
-                <div class="arch">
-                    <span>Flask (Python)</span>
-                    <span>SQLAlchemy ORM</span>
-                    <span>PostgreSQL</span>
-                    <span>Jinja2 Templates</span>
-                </div>
+                <h2 style="margin-top:0.5rem;">Contact</h2>
+                <p class="small">
+                    If you find issues, please use the feedback page so the team can respond: 
+                    <a class="button contact-button" href="/feedback">Submit Feedback</a>
+                </p>
             </aside>
+        </div>
+
+        <section class="card" style="margin-top:1rem;" id="architecture">
+            <h2>High-level architecture</h2>
+            <p class="muted">Below is a simplified, non-sensitive overview of how the dashboard is structured. This is intentionally high-level — implementation details and operational configuration are kept private to preserve security.</p>
+
+            <div class="arch" aria-hidden="false" aria-label="Simplified architecture">
+                <div class="node">Users (Browser / Mobile)</div>
+                <div class="arrow">⇩</div>
+                <div class="node">Reverse proxy / TLS termination (e.g., Nginx)</div>
+                <div class="arrow">⇩</div>
+                <div class="node">Application (Python 3 + Flask — web API & UI)</div>
+                <div class="arrow">⇩</div>
+                <div class="node">Persistent data store (PostgreSQL)</div>
+            </div>
+
+            <p class="small" style="margin-top:0.6rem;"><strong>Notes:</strong> the stack uses stable open-source components (for example, Nginx, Python/Flask, and PostgreSQL). The application is designed as a thin web layer that serves the dashboard and queries the database for current garage state. Telemetry and sensor ingests are processed before being stored; ingestion and operational logs are monitored and maintained separately by the administration team.</p>
         </section>
+
+        <section class="card" style="margin-top:1rem;" id="privacy-security">
+            <h2>Data & privacy</h2>
+            <p class="muted">Parkageddon is focused on aggregate garage availability. We intentionally avoid collecting personally identifying information on the public dashboard. Key points:</p>
+            <ul>
+                <li>Displayed information is aggregate (spots available per garage), not individual vehicle tracking.</li>
+                <li>Sensors and telemetry that feed the system are handled by campus operations and are ingested by secured services; personally identifying telemetry is not published.</li>
+                <li>Feedback submissions are retained only as needed to respond and may be reviewed by the course/institutional support staff.</li>
+            </ul>
+
+            <h2 style="margin-top:0.5rem;">Security practices (high level)</h2>
+            <p class="small">To reduce operational risk the deployment follows common security best practices such as:</p>
+            <ul>
+                <li>Transport-layer security (HTTPS/TLS) for all public traffic.</li>
+                <li>Access control and least-privilege for database and administrative access.</li>
+                <li>Input validation and output encoding in the application to limit injection risks.</li>
+                <li>Regular software updates and monitored logs to detect anomalous behavior.</li>
+            </ul>
+            <p class="small"><em>Operational configuration (keys, credentials, firewall rules, and monitoring details) is intentionally not exposed here.</em></p>
+        </section>
+
+        <section class="card" style="margin-top:1rem;" id="get-involved">
+            <h2>Get involved</h2>
+            <p class="muted">If you're a student interested in contributing, or a faculty/staff member with a use case, please reach out via the feedback form and include your contact info and a brief description of how you'd like to help. Student contributors may be invited to collaborate on subsequent improvements.</p>
+
+            <h2 style="margin-top:0.5rem;">Future work</h2>
+            <ul>
+                <li>Improve mobile-first styles and progressive web app (PWA) supports.</li>
+                <li>Expanded coverage to lots and permit zones where appropriate and permitted by campus policy.</li>
+            </ul>
+        </section>
+
     </main>
 
-    <footer style="background-color: var(--primary); color: var(--accent); text-align:center; padding:0.5rem; font-weight:bold; font-size:1.1rem; position: fixed; bottom:0; left:0; width:100%; z-index:1000;">
+    <footer>
         &copy; 2025 Lipscomb University
     </footer>
 
     <script>
+        // subtle header hide on scroll (same behavior as index)
         const header = document.getElementById('main-header');
-        function toggleHeader() {
+        window.addEventListener('scroll', () => {
             if (window.scrollY > 50) header.classList.add('hidden');
             else header.classList.remove('hidden');
-        }
-        window.addEventListener('scroll', toggleHeader);
-        window.addEventListener('load', toggleHeader);
+        });
     </script>
 </body>
 </html>
