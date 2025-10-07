@@ -4,16 +4,15 @@ from flask import Flask
 from dotenv import load_dotenv
 
 from models.schemas import db
-from models import garage_a
-from models import garage_b
-from models import garage_c  # NEW
+from models import garage_a, garage_b, garage_c
+from models import index as home
+from models import About, Feedback
 
 # Load environment variables from .env
 load_dotenv()
 
 def create_app():
     # Use the dashboard folder for templates and static files
-    # Serves /Images/... etc. from the same folder so existing paths work
     app = Flask(
         __name__,
         template_folder="../dashboard",
@@ -21,16 +20,22 @@ def create_app():
         static_url_path="/",
     )
 
+    # Core config
     app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+    app.config["SECRET_KEY"] = os.getenv("SECRET_KEY", "dev")
 
     # Initialize db
     db.init_app(app)
 
     # Register routes
-    app.register_blueprint(garage_a.bp)
-    app.register_blueprint(garage_b.bp)
-    app.register_blueprint(garage_c.bp)  # NEW
+    app.register_blueprint(home.bp)       # /
+    app.register_blueprint(About.bp)      # /about
+    app.register_blueprint(Feedback.bp)   # /feedback
+
+    app.register_blueprint(garage_a.bp)   # /garage-a
+    app.register_blueprint(garage_b.bp)   # /garage-b
+    app.register_blueprint(garage_c.bp)   # /garage-c
 
     return app
 
