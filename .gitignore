@@ -1,44 +1,40 @@
-# Python cache / build
+# Python
 __pycache__/
-*.pyc
+*.py[cod]
 *.pyo
 *.pyd
+*.so
 *.egg-info/
+.build/
 dist/
 build/
-
-# Virtual environments
-venv/
-.env/
 .venv/
+venv/
 env/
-ENV/
+pip-wheel-metadata/
 
-# Environment variables
-*.env
-
-# IDE / editor settings
+# IDE/editor
 .vscode/
 .idea/
-*.swp
-*.swo
+*.iml
 
-# OS files
+# OS
 .DS_Store
 Thumbs.db
 
-# Logs
+# Logs and artifacts
 *.log
+*.sqlite3
 
-# Coverage / testing
+# Env files and secrets
+.env
+*.env
+server/.env
+
+# Node/JS (if any static tooling)
+node_modules/
+
+# Coverage/test
 .coverage
 htmlcov/
 .pytest_cache/
-
-# Flask / SQLAlchemy
-instance/
-
-# SQLite databases (not used in prod, but ignore if created locally)
-*.db
-*.sqlite3
-
