@@ -23,7 +23,7 @@ def create_app():
     # Core config
     app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-    app.config["SECRET_KEY"] = os.getenv("SECRET_KEY", "dev")
+    app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
 
     # Initialize db
     db.init_app(app)
@@ -44,3 +44,4 @@ if __name__ == "__main__":
     with app.app_context():
         db.create_all()  # ensure tables exist
     app.run(debug=True)
+
