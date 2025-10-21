@@ -4,25 +4,6 @@
 -- 3 Cameras: A (Faculty Entry), B (Faculty→Student Transfer), C (Student Entry)
 -- ============================================================
 
--- Drop everything first
-DROP VIEW IF EXISTS vw_camera_activity CASCADE;
-DROP VIEW IF EXISTS vw_recent_section_events CASCADE;
-DROP VIEW IF EXISTS vw_garage_summary CASCADE;
-DROP VIEW IF EXISTS vw_section_occupancy CASCADE;
-DROP VIEW IF EXISTS garage_state CASCADE;
-
-DROP TABLE IF EXISTS camera_events CASCADE;
-DROP TABLE IF EXISTS section_events CASCADE;
-DROP TABLE IF EXISTS section_state CASCADE;
-DROP TABLE IF EXISTS cameras CASCADE;
-DROP TABLE IF EXISTS sections CASCADE;
-DROP TABLE IF EXISTS garages CASCADE;
-
-DROP FUNCTION IF EXISTS process_camera_event CASCADE;
-DROP FUNCTION IF EXISTS trg_section_events_apply CASCADE;
-DROP FUNCTION IF EXISTS trg_section_events_capacity_guard CASCADE;
-DROP FUNCTION IF EXISTS _section_event_deltas CASCADE;
-
 -- Extensions & Enums
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
