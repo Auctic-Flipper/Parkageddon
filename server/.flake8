@@ -1,0 +1,3 @@
+[flake8]
+# exclude the db directory (relative to server/)
+exclude = db, .venv, venv, env, __pycache__
