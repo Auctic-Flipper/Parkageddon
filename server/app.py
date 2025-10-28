@@ -21,9 +21,24 @@ def create_app():
     )
 
     # Core config
-    app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
+    db_uri = os.getenv("DATABASE_URL")
+    if not db_uri:
+        raise RuntimeError("DATABASE_URL environment variable must be set")
+    app.config["SQLALCHEMY_DATABASE_URI"] = db_uri
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-    app.config["SECRET_KEY"] = os.getenv("SECRET_KEY", "dev")
+
+    secret = os.getenv("SECRET_KEY")
+    if not secret or secret.lower() in {"dev", "changeme", "default", "secret"}:
+        raise RuntimeError("SECRET_KEY must be set to a strong, random value")
+    app.config["SECRET_KEY"] = secret
+
+    # Secure session cookie defaults (adjust SAMESITE as needed)
+    app.config.update(
+        SESSION_COOKIE_SECURE=True,       # requires HTTPS in production
+        SESSION_COOKIE_HTTPONLY=True,
+        SESSION_COOKIE_SAMESITE="Lax",
+        PREFERRED_URL_SCHEME="https",
+    )
 
     # Initialize db
     db.init_app(app)
@@ -32,7 +47,6 @@ def create_app():
     app.register_blueprint(home.bp)       # /
     app.register_blueprint(About.bp)      # /about
     app.register_blueprint(Feedback.bp)   # /feedback
-
     app.register_blueprint(garage_a.bp)   # /garage-a
     app.register_blueprint(garage_b.bp)   # /garage-b
     app.register_blueprint(garage_c.bp)   # /garage-c
@@ -40,7 +54,6 @@ def create_app():
     return app
 
 if __name__ == "__main__":
+    # For local dev only; rely on a WSGI server (e.g., waitress) in production.
     app = create_app()
-    with app.app_context():
-        db.create_all()  # ensure tables exist
-    app.run(debug=True)
+    app.run()

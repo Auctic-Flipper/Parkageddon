@@ -1,3 +1,2 @@
-- This version of nginx is just for windows users.
 - You will need to modify nginx-1.28.0\conf\nginx.conf to point to the appropriate file paths on your system or wherever you cloned the repository.
 - Waitress is required to be listening on 127.0.0.1:8000 before nginx will function properly. Waitress should be in the requirements.txt file for pip to install.
