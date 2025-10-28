@@ -18,5 +18,5 @@ To auto-start on boot, right‑click → Properties → set Startup type to Auto
 
 - Create the database PowerShell or Command Prompt: "C:\Program Files\PostgreSQL\18\bin\psql.exe" "postgresql://postgres:<yourpassword>@localhost:5432/postgres" -c "CREATE DATABASE parkageddon;"
 
-- Load your init SQL into the new DB. This command is just an example and you will need to supply your own path to the Parkageddon_init.sql file: "C:\Program Files\PostgreSQL\18\bin\psql.exe" "postgresql://postgres:<yourpassword>@localhost:5432/parkageddon" -f "C:\Users\jorda\Documents\Github\Parkageddon\server\db\Parkageddon_init.sql"
+- Load your init SQL into the new DB. This command is just an example and you will need to supply your own path to the database_init.sql file: "C:\Program Files\PostgreSQL\18\bin\psql.exe" "postgresql://postgres:<yourpassword>@localhost:5432/parkageddon" -f "C:\Users\<youruser>\Documents\Github\Parkageddon\server\db\database_init.sql"
 
