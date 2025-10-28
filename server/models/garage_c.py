@@ -1,6 +1,7 @@
 import os
 from flask import Blueprint, render_template
 from dotenv import load_dotenv
+from sqlalchemy import func
 
 from models.schemas import db, CurrentCount
 
@@ -21,14 +22,10 @@ def _sum_locations(location_ids):
 @bp.route("/")
 def garage_c_dashboard():
     """
-    Configure mappings for garage C floors with:
-      GARAGE_C_FLOOR1_LOCATIONS
-      GARAGE_C_FLOOR2_LOCATIONS
-      GARAGE_C_FLOOR3_LOCATIONS
-      GARAGE_C_FLOOR4_LOCATIONS
-      (optional) GARAGE_C_TOTAL_LOCATIONS
-
-    Garage C returns per-floor totals (no faculty/student split).
+    Garage C reads per-floor totals from CurrentCount.
+    Optional env vars:
+      GARAGE_C_FLOOR1_LOCATIONS, GARAGE_C_FLOOR2_LOCATIONS, GARAGE_C_FLOOR3_LOCATIONS, GARAGE_C_FLOOR4_LOCATIONS
+      GARAGE_C_TOTAL_LOCATIONS (optional)
     """
     floor1_ids = _parse_list_env("GARAGE_C_FLOOR1_LOCATIONS")
     floor2_ids = _parse_list_env("GARAGE_C_FLOOR2_LOCATIONS")
@@ -47,7 +44,7 @@ def garage_c_dashboard():
         if any([floor1_ids, floor2_ids, floor3_ids, floor4_ids]):
             total_cars = floor1_total + floor2_total + floor3_total + floor4_total
         else:
-            total_cars = db.session.query(CurrentCount).with_entities(db.func.sum(CurrentCount.count)).scalar() or 0
+            total_cars = db.session.query(func.coalesce(func.sum(CurrentCount.count), 0)).scalar() or 0
 
     context = {
         "total_cars": total_cars,
