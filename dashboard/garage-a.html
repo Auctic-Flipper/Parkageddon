@@ -33,7 +33,7 @@
 
         .card { background: var(--card-bg); border:1px solid var(--card-border); border-radius:8px; padding:1rem; box-shadow: 0 1px 2px rgba(0,0,0,0.03); margin-bottom:1rem; }
 
-        .live-feed { width: 100%; max-width: 800px; height: 450px; border:1px solid var(--card-border); border-radius:8px; background:#000; display:flex; align-items:center; justify-content:center; color:#fff; font-size:1.2rem; margin-bottom:2rem; }
+        .live-feed { width: 100%; max-width: 800px; height: 450px; border:1px solid var(--card-border); border-radius:8px; background:#000; display:flex; align-items:center; justify-content:center; color:#fff; font-size:1.2rem; margin-top: 0.5rem; margin-bottom: 2rem; }
 
         table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
         th, td { border: 1px solid var(--card-border); padding: 0.75rem; text-align: center; }
@@ -83,26 +83,26 @@
                 <tbody>
                     <tr>
                         <td>Total</td>
-                        <td>{{ total_cars }}</td>
-                        <td>{{ total_motorcycles }}</td>
+                        <td><span id="total_cars">{{ total_cars }}</span></td>
+                        <td><span id="total_motorcycles">{{ total_motorcycles }}</span></td>
                         <td>All floors combined</td>
                     </tr>
                     <tr>
                         <td>Floor 1</td>
-                        <td>{{ floor1_cars_faculty }} Faculty / {{ floor1_cars_student }} Student</td>
-                        <td>{{ floor1_motorcycles }}</td>
+                        <td><span id="floor1_cars_faculty">{{ floor1_cars_faculty }}</span> Faculty / <span id="floor1_cars_student">{{ floor1_cars_student }}</span> Student</td>
+                        <td><span id="floor1_motorcycles">{{ floor1_motorcycles }}</span></td>
                         <td>There is a section reserved for falculty</td>
                     </tr>
                     <tr>
                         <td>Floor 2</td>
-                        <td>{{ floor2_cars }}</td>
-                        <td>{{ floor2_motorcycles }}</td>
+                        <td><span id="floor2_cars">{{ floor2_cars }}</span></td>
+                        <td><span id="floor2_motorcycles">{{ floor2_motorcycles }}</span></td>
                         <td>Free for anyone</td>
                     </tr>
                     <tr>
                         <td>Floor 3</td>
-                        <td>{{ floor3_cars }}</td>
-                        <td>{{ floor3_motorcycles }}</td>
+                        <td><span id="floor3_cars">{{ floor3_cars }}</span></td>
+                        <td><span id="floor3_motorcycles">{{ floor3_motorcycles }}</span></td>
                         <td>Free for anyone</td>
                     </tr>
                 </tbody>
@@ -121,6 +121,75 @@
             if (window.scrollY > 50) header.classList.add('hidden');
             else header.classList.remove('hidden');
         });
+    </script>
+
+    <script>
+    // Polling snippet — fetches /api/current_counts every N seconds and updates elements on the page.
+    // How it updates:
+    // 1) If you add a mapping in `locationToElementId`, the script will use that mapping to update that element id.
+    // 2) Otherwise it will try sensible defaults:
+    //    - element with id "count-<location_id>"
+    //    - element with id "<location_id>"
+    //    - any element with data-location="<location_id>" (it will update its textContent)
+    //
+    // To wire a DB row to a page element, either:
+    // - Add a mapping below (e.g. 'entrance_1': 'floor1_cars'), or
+    // - Give the element an id like "count-entrance_1" or data-location="entrance_1".
+    //
+    // Example mapping:
+    //  const locationToElementId = { 'entrance_1': 'floor1_cars', 'entrance_2': 'floor2_cars' };
+    //
+    (function() {
+        const POLL_INTERVAL_MS = 3000;
+
+        // Map DB location_id -> element id on this page. Edit as you deploy to match your DB.
+        const locationToElementId = {
+            // 'entrance_1': 'floor1_cars',
+            // 'entrance_2': 'floor2_cars',
+        };
+
+        function updateElementTextById(id, text) {
+            const el = document.getElementById(id);
+            if (el) el.textContent = text;
+        }
+
+        function updateElementsByDataLocation(location, text) {
+            const els = document.querySelectorAll('[data-location="' + location + '"]');
+            els.forEach(e => e.textContent = text);
+        }
+
+        async function fetchAndUpdate() {
+            try {
+                const res = await fetch('/api/current_counts', { cache: 'no-store' });
+                if (!res.ok) {
+                    console.warn('Polling: /api/current_counts returned', res.status);
+                    return;
+                }
+                const counts = await res.json();
+                // counts is expected to be an array of objects with at least {location_id, count, camera_name, last_update}
+                counts.forEach(c => {
+                    const loc = c.location_id;
+                    const val = (c.count != null) ? c.count : '';
+                    // 1) mapping
+                    if (locationToElementId[loc]) {
+                        updateElementTextById(locationToElementId[loc], val);
+                    }
+                    // 2) id-based fallback: count-<location_id>
+                    updateElementTextById('count-' + loc, val);
+                    // 3) id-based fallback: <location_id>
+                    updateElementTextById(loc, val);
+                    // 4) data-location attr fallback
+                    updateElementsByDataLocation(loc, val);
+                });
+            } catch (err) {
+                console.error('Error polling current_counts:', err);
+            }
+        }
+
+        // Start polling
+        fetchAndUpdate();
+        setInterval(fetchAndUpdate, POLL_INTERVAL_MS);
+    })();
     </script>
 </body>
 </html>
