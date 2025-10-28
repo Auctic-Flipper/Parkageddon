@@ -5,6 +5,20 @@
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Highrise Garage - Parkageddon Dashboard</title>
     <link rel="icon" type="image/png" href="Images/favicon.png">
+
+    <meta http-equiv="Content-Security-Policy" content="
+        default-src 'none';
+        script-src 'self' 'unsafe-inline';
+        style-src 'self' 'unsafe-inline';
+        img-src 'self' data:;
+        connect-src 'self';
+        font-src 'self';
+        frame-ancestors 'none';
+        object-src 'none';
+        base-uri 'self';
+    ">
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+
     <style>
         :root {
             --primary: #5A2D81; /* Lipscomb Purple */
@@ -18,128 +32,128 @@
 
         *, *::before, *::after { box-sizing: border-box; }
 
-        html, body { 
-            height: 100%; 
-            margin: 0; 
-            padding: 0; 
-            font-family: var(--body-font); 
-            color: #111; 
-            background: #fafafa; 
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            font-family: var(--body-font);
+            color: #111;
+            background: #fafafa;
         }
 
-        header { 
-            background-color: var(--primary); 
-            color: var(--accent); 
-            text-align: center; 
-            padding: 1rem; 
+        header {
+            background-color: var(--primary);
+            color: var(--accent);
+            text-align: center;
+            padding: 1rem;
         }
 
-        header h1 { 
-            color: var(--accent); 
-            margin: 0 0 0.5rem 0; 
+        header h1 {
+            color: var(--accent);
+            margin: 0 0 0.5rem 0;
         }
 
-        header.hidden { 
-            opacity: 0; 
-            visibility: hidden; 
-            height: 0; 
-            padding: 0; 
-            overflow: hidden; 
+        header.hidden {
+            opacity: 0;
+            visibility: hidden;
+            height: 0;
+            padding: 0;
+            overflow: hidden;
         }
 
-        nav { 
-            display: flex; 
-            justify-content: center; 
-            gap: 2rem; 
-            background: var(--primary); 
-            padding: 0.5rem; 
-            position: sticky; 
+        nav {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            background: var(--primary);
+            padding: 0.5rem;
+            position: sticky;
             top: 0;
-            z-index: 1000; 
+            z-index: 1000;
         }
 
-        nav a { 
-            color: var(--accent); 
-            font-weight: bold; 
-            text-decoration: none; 
-            font-size: 1.05rem; 
+        nav a {
+            color: var(--accent);
+            font-weight: bold;
+            text-decoration: none;
+            font-size: 1.05rem;
         }
 
         nav a:hover, nav a.active { text-decoration: underline; }
 
-        main { 
-            max-width: var(--container-max); 
-            margin: 2rem auto; 
-            padding: 1rem; 
-            padding-bottom: 3rem; 
+        main {
+            max-width: var(--container-max);
+            margin: 2rem auto;
+            padding: 1rem;
+            padding-bottom: 3rem;
         }
 
-        h2 { 
-            color: var(--primary); 
-            margin-top: 1rem; 
-            margin-bottom: 0.5rem; 
+        h2 {
+            color: var(--primary);
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
         }
 
-        .card { 
-            background: var(--card-bg); 
-            border:1px solid var(--card-border); 
-            border-radius:8px; 
-            padding:1rem; 
-            box-shadow: 0 1px 2px rgba(0,0,0,0.03); 
-            margin-bottom:1rem; 
+        .card {
+            background: var(--card-bg);
+            border:1px solid var(--card-border);
+            border-radius:8px;
+            padding:1rem;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+            margin-bottom:1rem;
         }
 
-        .live-feed { 
-            width: 100%; 
-            max-width: 800px; 
-            height: 450px; 
-            border:1px solid var(--card-border); 
-            border-radius:8px; 
-            background:#000; 
-            display:flex; 
-            align-items:center; 
-            justify-content:center; 
-            color:#fff; 
-            font-size:1.2rem; 
-            margin-top: 0.5rem; 
-            margin-bottom: 2rem; 
+        .live-feed {
+            width: 100%;
+            max-width: 800px;
+            height: 450px;
+            border:1px solid var(--card-border);
+            border-radius:8px;
+            background:#000;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            color:#fff;
+            font-size:1.2rem;
+            margin-top: 0.5rem;
+            margin-bottom: 2rem;
         }
 
-        table { 
-            width: 100%; 
-            border-collapse: collapse; 
-            margin-top: 1rem; 
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
         }
 
-        th, td { 
-            border: 1px solid var(--card-border); 
-            padding: 0.75rem; 
-            text-align: center; 
+        th, td {
+            border: 1px solid var(--card-border);
+            padding: 0.75rem;
+            text-align: center;
         }
 
-        th { 
-            background-color: var(--primary); 
-            color: var(--accent); 
-            font-weight: bold; 
+        th {
+            background-color: var(--primary);
+            color: var(--accent);
+            font-weight: bold;
         }
 
-        td { 
-            background-color: #fff; 
-            color: var(--muted); 
+        td {
+            background-color: #fff;
+            color: var(--muted);
         }
 
-        footer { 
-            background-color: var(--primary); 
-            color: var(--accent); 
-            text-align:center; 
-            padding:0.5rem; 
-            font-weight:bold; 
-            font-size:1.1rem; 
-            position: fixed; 
-            bottom:0; 
-            left:0; 
-            width:100%; 
-            z-index:1000; 
+        footer {
+            background-color: var(--primary);
+            color: var(--accent);
+            text-align:center;
+            padding:0.5rem;
+            font-weight:bold;
+            font-size:1.1rem;
+            position: fixed;
+            bottom:0;
+            left:0;
+            width:100%;
+            z-index:1000;
         }
 
         @media(max-width:900px){
@@ -156,8 +170,8 @@
         <a href="/">Home</a>
         <a href="/about">About</a>
         <a href="/feedback">Feedback</a>
-        <a href="https://lipscomb.edu/engineering">Fields</a>
-        <a href="https://lipscomb.edu">Lipscomb University</a>
+        <a href="https://lipscomb.edu/engineering" target="_blank" rel="noopener noreferrer">Fields</a>
+        <a href="https://lipscomb.edu" target="_blank" rel="noopener noreferrer">Lipscomb University</a>
     </nav>
 
     <main>
@@ -165,7 +179,7 @@
         <section class="card">
             <h2>Live Feed:</h2>
             <div class="live-feed">
-                <!-- Replace this with your camera embed or video stream -->
+                <!-- Replace this with the camera embed or video stream -->
                 Camera Feed Placeholder
             </div>
         </section>
@@ -232,7 +246,7 @@
     </script>
 
     <script>
-    // Same polling snippet used on other garage pages. Reference garage-a.html if you need to.
+    // Same polling snippet used on other garage pages.
     (function() {
         const POLL_INTERVAL_MS = 3000;
         const locationToElementId = {
