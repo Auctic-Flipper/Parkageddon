@@ -1,9 +1,9 @@
 # app.py
 import os
-from flask import Flask
+from flask import Flask, jsonify
 from dotenv import load_dotenv
 
-from models.schemas import db
+from models.schemas import db, get_all_current_counts
 from models import garage_a, garage_b, garage_c
 from models import index as home
 from models import About, Feedback
@@ -40,7 +40,7 @@ def create_app():
         PREFERRED_URL_SCHEME="https",
     )
 
-    # Initialize db
+    # Initialize db (bind SQLAlchemy to Flask app) - do NOT create tables here.
     db.init_app(app)
 
     # Register routes
@@ -50,6 +50,12 @@ def create_app():
     app.register_blueprint(garage_a.bp)   # /garage-a
     app.register_blueprint(garage_b.bp)   # /garage-b
     app.register_blueprint(garage_c.bp)   # /garage-c
+
+    # Simple read-only JSON API for current counts (for polling or SSE clients)
+    @app.route("/api/current_counts", methods=["GET"])
+    def api_current_counts():
+        counts = get_all_current_counts()
+        return jsonify([c.to_dict() for c in counts])
 
     return app
 
