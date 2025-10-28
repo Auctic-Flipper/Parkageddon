@@ -5,6 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Allen Arena West Garage - Parkageddon Dashboard</title>
     <link rel="icon" type="image/png" href="Images/favicon.png">
+
+    <meta http-equiv="Content-Security-Policy" content="
+        default-src 'none';
+        script-src 'self' 'unsafe-inline';
+        style-src 'self' 'unsafe-inline';
+        img-src 'self' data:;
+        connect-src 'self';
+        font-src 'self';
+        frame-ancestors 'none';
+        object-src 'none';
+        base-uri 'self';
+    ">
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+
     <style>
         :root {
             --primary: #5A2D81; /* Lipscomb Purple */
@@ -34,17 +48,17 @@
             padding: 1rem;
         }
 
-        header h1 { 
-            color: var(--accent); 
+        header h1 {
+            color: var(--accent);
             margin: 0 0 0.5rem 0;
         }
 
-        header.hidden { 
-            opacity: 0; 
-            visibility: hidden; 
-            height: 0; 
-            padding: 0; 
-            overflow: hidden; 
+        header.hidden {
+            opacity: 0;
+            visibility: hidden;
+            height: 0;
+            padding: 0;
+            overflow: hidden;
         }
 
         nav {
@@ -156,8 +170,8 @@
         <a href="/">Home</a>
         <a href="/about">About</a>
         <a href="/feedback">Feedback</a>
-        <a href="https://lipscomb.edu/engineering">Fields</a>
-        <a href="https://lipscomb.edu">Lipscomb University</a>
+        <a href="https://lipscomb.edu/engineering" target="_blank" rel="noopener noreferrer">Fields</a>
+        <a href="https://lipscomb.edu" target="_blank" rel="noopener noreferrer">Lipscomb University</a>
     </nav>
 
     <main>
@@ -165,7 +179,7 @@
         <section class="card">
             <h2>Live Feed:</h2>
             <div class="live-feed">
-                <!-- Replace this with your camera embed or video stream -->
+                <!-- Replace this with the camera embed or video stream -->
                 Camera Feed Placeholder
             </div>
         </section>
