@@ -1,0 +1,13 @@
+In Git Bash:
+
+cd Documents/
+cd Github/
+cd Parkageddon/
+cd server
+source venv/Scripts/activate
+waitress-serve --listen=127.0.0.1:8000 --call "app:create_app"
+
+In a different shell:
+
+cd /c/nginx-1.28.0/
+./nginx.exe
