@@ -1,10 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Feedback - Parkageddon Dashboard</title>
     <link rel="icon" type="image/png" href="Images/favicon.png">
+
+    <!-- Content Security Policy: -->
+    <meta http-equiv="Content-Security-Policy" content="
+        default-src 'none';
+        script-src 'self';
+        style-src 'self' 'unsafe-inline';
+        img-src 'self' data:;
+        connect-src 'self' https://formspree.io;
+        form-action https://formspree.io;
+        base-uri 'self';
+        frame-ancestors 'none';
+        object-src 'none';
+    ">
+
+    <!-- Other security-related meta tags -->
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <meta http-equiv="X-Frame-Options" content="DENY" />
+
     <style>
         :root {
             --primary: #5A2D81;
@@ -37,6 +55,13 @@
         button:hover { background-color: #4b236a; }
 
         footer { background-color: var(--primary); color: var(--accent); text-align: center; padding: 0.5rem; font-weight: bold; font-size: 1.1rem; position: fixed; bottom: 0; left: 0; width: 100%; z-index: 1000; }
+
+        /* Honeypot (hidden from users but visible to bots) */
+        .hp { position: absolute !important; left: -9999px !important; top: auto !important; width: 1px !important; height: 1px !important; overflow: hidden !important; }
+
+        @media (max-width: 600px) {
+            form { padding: 1rem; }
+        }
     </style>
 </head>
 <body>
@@ -48,31 +73,39 @@
         <a href="/">Home</a>
         <a href="/about">About</a>
         <a href="/feedback">Feedback</a>
-        <a href="https://lipscomb.edu/engineering" target="_blank" rel="noopener">Fields</a>
-        <a href="https://lipscomb.edu" target="_blank" rel="noopener">Lipscomb University</a>
+        <a href="https://lipscomb.edu/engineering" target="_blank" rel="noopener noreferrer">Fields</a>
+        <a href="https://lipscomb.edu" target="_blank" rel="noopener noreferrer">Lipscomb University</a>
     </nav>
 
     <main>
         <h2>Feedback Form</h2>
-        <p>We’d love to hear your thoughts! Please fill out the form below.</p>
+        <p class="intro">We’d love to hear your thoughts! Please fill out the form below. We do not echo your submission back to the page.</p>
 
-        <!-- Direct submit to Formspree (restored) -->
-        <form action="https://formspree.io/f/xkgqrekj" method="POST" accept-charset="UTF-8">
+        
+        <form action="https://formspree.io/f/xkgqrekj" method="POST" accept-charset="UTF-8" autocomplete="on" spellcheck="true" novalidate>
             <!-- Optional subject line for emails -->
             <input type="hidden" name="_subject" value="Parkageddon feedback">
 
+            <!-- Honeypot field - keep empty in normal use; bots may fill it -->
+            <div class="hp" aria-hidden="true">
+                <label for="_gotcha">Leave this field blank</label>
+                <input type="text" name="_gotcha" id="_gotcha" tabindex="-1" autocomplete="off">
+            </div>
+
+            <!-- Safer to avoid reflecting submitted data back into the UI.
+                 Limit lengths to reduce risk of large payloads. -->
             <label for="name">Your Name:</label>
-            <input type="text" id="name" name="name" required autocomplete="name">
+            <input type="text" id="name" name="name" required autocomplete="name" maxlength="100" inputmode="text" aria-label="Your name">
 
             <label for="email">Your Email:</label>
-            <input type="email" id="email" name="_replyto" required autocomplete="email">
+            <input type="email" id="email" name="_replyto" required autocomplete="email" maxlength="254" aria-label="Your email">
 
             <label for="message">Your Message:</label>
-            <textarea id="message" name="message" required placeholder="Share your thoughts..."></textarea>
+            <textarea id="message" name="message" required placeholder="Share your thoughts..." maxlength="2000" aria-label="Your message"></textarea>
 
-            <!-- Optional redirect back to your site after success
-            <input type="hidden" name="_redirect" value="http://localhost:5000/">
-            -->
+            <!-- If we later enable redirects, let's avoid echoing user content on that page.
+                 Would prefer a static "Thank you" page that does not include submitted text. -->
+            <!-- <input type="hidden" name="_redirect" value="https://parkageddon.net/thank-you"> -->
 
             <button type="submit">Send Feedback</button>
         </form>
