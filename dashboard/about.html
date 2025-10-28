@@ -5,8 +5,28 @@
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>About — Parkageddon Dashboard</title>
     <link rel="icon" type="image/png" href="Images/favicon.png">
+
+    <!-- Conservative Content Security Policy (meta form).
+         - Allows inline styles/scripts for now so existing inline CSS/JS continue to work.
+         - Would prefer moving CSS/JS to external files and then using a stricter CSP (no 'unsafe-inline').
+         - Eventually want to use server headers for stronger enforcement.
+    -->
+    <meta http-equiv="Content-Security-Policy" content="
+        default-src 'none';
+        script-src 'self' 'unsafe-inline';
+        style-src 'self' 'unsafe-inline';
+        img-src 'self' data:;
+        connect-src 'self';
+        font-src 'self';
+        frame-ancestors 'none';
+        object-src 'none';
+        base-uri 'self';
+    ">
+
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+
     <style>
-        /* Match the styling used on index.html for visual consistency */
+    
         :root {
             --primary: #5A2D81; /* Lipscomb Purple */
             --accent: gold;
@@ -69,20 +89,20 @@
         <a href="/">Home</a>
         <a href="/about" aria-current="page">About</a>
         <a href="/feedback">Feedback</a>
-        <a href="https://lipscomb.edu/engineering">Fields</a>
-        <a href="https://lipscomb.edu">Lipscomb University</a>
+        <a href="https://lipscomb.edu/engineering" target="_blank" rel="noopener noreferrer">Fields</a>
+        <a href="https://lipscomb.edu" target="_blank" rel="noopener noreferrer">Lipscomb University</a>
     </nav>
 
     <main role="main" aria-labelledby="about-heading">
         <section class="hero card" aria-hidden="false">
             <h1 id="about-heading">About Parkageddon</h1>
-            <p class="lead">Parkageddon was developed by the Wireless Communications course at Lipscomb University to help students, faculty, and visitors locate available parking quickly and safely. The project combines campus telemetry, a lightweight web dashboard, and careful attention to usability and privacy.</p>
+            <p class="lead">Parkageddon was developed by the Wireless Communications course at Lipscomb University to help students, faculty, and visitors locate available parking quickly and safely. [...]
         </section>
 
         <div class="grid">
             <div class="card" id="purpose">
                 <h2>What problem does it solve?</h2>
-                <p class="muted">On busy days the campus parking supply can be uncertain. Parkageddon gives a centralized, easy-to-use view of garage availability so drivers can choose a destination with confidence, reduce circling for parking, and lower traffic and emissions within the campus.</p>
+                <p class="muted">On busy days the campus parking supply can be uncertain. Parkageddon gives a centralized, easy-to-use view of garage availability so drivers can choose a destination w[...]
 
                 <h2 style="margin-top:1rem;">Key features</h2>
                 <ul>
@@ -96,11 +116,11 @@
             <aside class="card" aria-labelledby="contributors-heading">
                 <h2 id="contributors-heading">Team & Credits</h2>
                 <p class="credits">Project lead: <strong>Dr. Kenneth Mayer</strong>.</p>
-                <p class="credits">Developed by a team of <strong>11 students</strong> majoring in Computer Science, Cybersecurity, Software Engineering, and related fields as part of the Wireless Communications class.</p>
+                <p class="credits">Developed by a team of <strong>11 students</strong> majoring in Computer Science, Cybersecurity, Software Engineering, and related fields as part of the Wireless Com[...]
 
                 <h2 style="margin-top:0.5rem;">Contact</h2>
                 <p class="small">
-                    If you find issues, please use the feedback page so the team can respond: 
+                    If you find issues, please use the feedback page so the team can respond:
                     <a class="button contact-button" href="/feedback">Submit Feedback</a>
                 </p>
             </aside>
@@ -108,7 +128,7 @@
 
         <section class="card" style="margin-top:1rem;" id="architecture">
             <h2>High-level architecture</h2>
-            <p class="muted">Below is a simplified, non-sensitive overview of how the dashboard is structured. This is intentionally high-level — implementation details and operational configuration are kept private to preserve security.</p>
+            <p class="muted">Below is a simplified, non-sensitive overview of how the dashboard is structured. This is intentionally high-level — implementation details and operational configuration[...]
 
             <div class="arch" aria-hidden="false" aria-label="Simplified architecture">
                 <div class="node">Users (Browser / Mobile)</div>
@@ -120,7 +140,7 @@
                 <div class="node">Persistent data store (PostgreSQL)</div>
             </div>
 
-            <p class="small" style="margin-top:0.6rem;"><strong>Notes:</strong> the stack uses stable open-source components (for example, Nginx, Python/Flask, and PostgreSQL). The application is designed as a thin web layer that serves the dashboard and queries the database for current garage state. Telemetry and sensor ingests are processed before being stored; ingestion and operational logs are monitored and maintained separately by the administration team.</p>
+            <p class="small" style="margin-top:0.6rem;"><strong>Notes:</strong> the stack uses stable open-source components (for example, Nginx, Python/Flask, and PostgreSQL). The application is desi[...]
         </section>
 
         <section class="card" style="margin-top:1rem;" id="privacy-security">
@@ -145,7 +165,7 @@
 
         <section class="card" style="margin-top:1rem;" id="get-involved">
             <h2>Get involved</h2>
-            <p class="muted">If you're a student interested in contributing, or a faculty/staff member with a use case, please reach out via the feedback form and include your contact info and a brief description of how you'd like to help. Student contributors may be invited to collaborate on subsequent improvements.</p>
+            <p class="muted">If you're a student interested in contributing, or a faculty/staff member with a use case, please reach out via the feedback form and include your contact info and a brief[...]
 
             <h2 style="margin-top:0.5rem;">Future work</h2>
             <ul>
@@ -161,7 +181,7 @@
     </footer>
 
     <script>
-        // subtle header hide on scroll (same behavior as index)
+        // subtle header hide on scroll
         const header = document.getElementById('main-header');
         window.addEventListener('scroll', () => {
             if (window.scrollY > 50) header.classList.add('hidden');
