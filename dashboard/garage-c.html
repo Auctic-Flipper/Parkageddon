@@ -54,7 +54,7 @@
             background: var(--primary); 
             padding: 0.5rem; 
             position: sticky; 
-            top: 0; 
+            top: 0;
             z-index: 1000; 
         }
 
@@ -185,32 +185,32 @@
                 <tbody>
                     <tr>
                         <td>Total</td>
-                        <td>{{ total_cars }}</td>
-                        <td>{{ total_motorcycles }}</td>
+                        <td><span id="total_cars">{{ total_cars }}</span></td>
+                        <td><span id="total_motorcycles">{{ total_motorcycles }}</span></td>
                         <td>All levels combined</td>
                     </tr>
                     <tr>
                         <td>Green Level (Bottom)</td>
-                        <td>{{ green_cars }}</td>
-                        <td>{{ green_motorcycles }}</td>
+                        <td><span id="green_cars">{{ green_cars }}</span></td>
+                        <td><span id="green_motorcycles">{{ green_motorcycles }}</span></td>
                         <td>Free for anyone</td>
                     </tr>
                     <tr>
                         <td>Purple Level</td>
-                        <td>{{ purple_cars }}</td>
-                        <td>{{ purple_motorcycles }}</td>
+                        <td><span id="purple_cars">{{ purple_cars }}</span></td>
+                        <td><span id="purple_motorcycles">{{ purple_motorcycles }}</span></td>
                         <td>Sometimes cleared for events</td>
                     </tr>
                     <tr>
                         <td>Blue Level</td>
-                        <td>{{ blue_cars }}</td>
-                        <td>{{ blue_motorcycles }}</td>
+                        <td><span id="blue_cars">{{ blue_cars }}</span></td>
+                        <td><span id="blue_motorcycles">{{ blue_motorcycles }}</span></td>
                         <td>Free for anyone</td>
                     </tr>    
                     <tr>
                         <td>Gold Level (Top)</td>
-                        <td>{{ gold_cars }}</td>
-                        <td>{{ gold_motorcycles }}</td>
+                        <td><span id="gold_cars">{{ gold_cars }}</span></td>
+                        <td><span id="gold_motorcycles">{{ gold_motorcycles }}</span></td>
                         <td>Uncovered roof parking</td>
                     </tr>
                 </tbody>
@@ -229,6 +229,48 @@
             if (window.scrollY > 50) header.classList.add('hidden');
             else header.classList.remove('hidden');
         });
+    </script>
+
+    <script>
+    // Same polling snippet used on other garage pages. Reference garage-a.html if you need to.
+    (function() {
+        const POLL_INTERVAL_MS = 3000;
+        const locationToElementId = {
+            // 'entrance_1': 'green_cars',
+            // 'entrance_2': 'purple_cars',
+        };
+
+        function updateElementTextById(id, text) {
+            const el = document.getElementById(id);
+            if (el) el.textContent = text;
+        }
+
+        function updateElementsByDataLocation(location, text) {
+            const els = document.querySelectorAll('[data-location="' + location + '"]');
+            els.forEach(e => e.textContent = text);
+        }
+
+        async function fetchAndUpdate() {
+            try {
+                const res = await fetch('/api/current_counts', { cache: 'no-store' });
+                if (!res.ok) return;
+                const counts = await res.json();
+                counts.forEach(c => {
+                    const loc = c.location_id;
+                    const val = (c.count != null) ? c.count : '';
+                    if (locationToElementId[loc]) updateElementTextById(locationToElementId[loc], val);
+                    updateElementTextById('count-' + loc, val);
+                    updateElementTextById(loc, val);
+                    updateElementsByDataLocation(loc, val);
+                });
+            } catch (err) {
+                console.error('Error polling current_counts:', err);
+            }
+        }
+
+        fetchAndUpdate();
+        setInterval(fetchAndUpdate, POLL_INTERVAL_MS);
+    })();
     </script>
 </body>
 </html>
