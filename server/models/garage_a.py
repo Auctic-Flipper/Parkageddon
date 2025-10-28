@@ -1,9 +1,8 @@
 import os
-from flask import Blueprint, render_template
-from sqlalchemy import func
+from flask import Blueprint, render_template, current_app
 from dotenv import load_dotenv
 
-from models.schemas import db, Garage, Floor, FloorStatus
+from models.schemas import db, CurrentCount
 
 # Load environment variables
 load_dotenv()
@@ -11,50 +10,71 @@ load_dotenv()
 # Create the Blueprint (instead of a full Flask app)
 bp = Blueprint('garage_a', __name__, url_prefix='/garage-a')
 
+def _parse_list_env(name):
+    """Return list of non-empty trimmed values from a comma-separated env var, or [] if not set."""
+    val = os.getenv(name, "")
+    return [v.strip() for v in val.split(",") if v.strip()]
+
+def _sum_locations(location_ids):
+    if not location_ids:
+        return 0
+    rows = db.session.query(CurrentCount).filter(CurrentCount.location_id.in_(location_ids)).all()
+    return sum((r.count or 0) for r in rows)
+
 @bp.route("/")
 def garage_a_dashboard():
-    garage = Garage.query.filter_by(name="Fields Parking").first()
-    if not garage:
-        return "Garage 'Fields Parking' not found. Run the seed or insert it.", 404
+    """
+    Compute totals from CurrentCount rows.
+    Configure environment variables to map location_id values to each floor:
 
-    # Totals
-    totals = (
-        db.session.query(FloorStatus.vehicle_type, func.sum(FloorStatus.free_spots))
-        .join(Floor)
-        .filter(Floor.garage_id == garage.garage_id)
-        .group_by(FloorStatus.vehicle_type)
-        .all()
-    )
-    totals_dict = {t[0]: t[1] for t in totals}
+    - GARAGE_A_FLOOR1_LOCATIONS=loc1,loc2
+    - GARAGE_A_FLOOR2_LOCATIONS=loc3
+    - GARAGE_A_FLOOR3_LOCATIONS=loc4,loc5
+    - (optional) GARAGE_A_TOTAL_LOCATIONS=loc1,loc2,loc3,loc4,loc5
 
-    # Per-floor
-    floor_statuses = (
-        db.session.query(Floor.floor_number, FloorStatus.vehicle_type, FloorStatus.free_spots)
-        .join(FloorStatus, Floor.floor_id == FloorStatus.floor_id)
-        .filter(Floor.garage_id == garage.garage_id)
-        .order_by(Floor.floor_number)
-        .all()
-    )
+    If mappings are missing we try a graceful fallback: sum all counts as total and set floors to zero.
+    """
+    # Read mappings from environment (comma-separated location_ids)
+    floor1_ids = _parse_list_env("GARAGE_A_FLOOR1_LOCATIONS")
+    floor2_ids = _parse_list_env("GARAGE_A_FLOOR2_LOCATIONS")
+    floor3_ids = _parse_list_env("GARAGE_A_FLOOR3_LOCATIONS")
+    total_ids = _parse_list_env("GARAGE_A_TOTAL_LOCATIONS")
 
-    floor_data = {}
-    for floor_number, vehicle_type, free_spots in floor_statuses:
-        if floor_number not in floor_data:
-            floor_data[floor_number] = {"car": 0, "motorcycle": 0}
-        floor_data[floor_number][vehicle_type] = free_spots
+    # Compute per-floor sums
+    floor1_total = _sum_locations(floor1_ids) if floor1_ids else 0
+    floor2_total = _sum_locations(floor2_ids) if floor2_ids else 0
+    floor3_total = _sum_locations(floor3_ids) if floor3_ids else 0
+
+    # Compute grand total
+    if total_ids:
+        total_cars = _sum_locations(total_ids)
+    else:
+        # if no explicit total mapping, sum whatever we have, or sum all rows as fallback
+        if any([floor1_ids, floor2_ids, floor3_ids]):
+            total_cars = floor1_total + floor2_total + floor3_total
+        else:
+            # fallback: sum all current_counts
+            total_cars = db.session.query(CurrentCount).with_entities(db.func.sum(CurrentCount.count)).scalar() or 0
+
+    # NOTE: current_counts schema does not include vehicle type separation (car vs motorcycle).
+    # If our data doesn't separate motorcycles by location_id, set motorcycles to 0 (or change mapping).
+    # Provide the same faculty/student split for floor1 as previous templates expected.
+    floor1_cars_faculty = floor1_total // 2
+    floor1_cars_student = floor1_total - floor1_cars_faculty
 
     context = {
-        "total_cars": totals_dict.get("car", 0),
-        "total_motorcycles": totals_dict.get("motorcycle", 0),
+        "total_cars": total_cars,
+        "total_motorcycles": 0,  # update if we have separate motorcycle location rows
 
-        "floor1_cars_faculty": floor_data.get(1, {}).get("car", 0) // 2,
-        "floor1_cars_student": floor_data.get(1, {}).get("car", 0) - (floor_data.get(1, {}).get("car", 0) // 2),
-        "floor1_motorcycles": floor_data.get(1, {}).get("motorcycle", 0),
+        "floor1_cars_faculty": floor1_cars_faculty,
+        "floor1_cars_student": floor1_cars_student,
+        "floor1_motorcycles": 0,
 
-        "floor2_cars": floor_data.get(2, {}).get("car", 0),
-        "floor2_motorcycles": floor_data.get(2, {}).get("motorcycle", 0),
+        "floor2_cars": floor2_total,
+        "floor2_motorcycles": 0,
 
-        "floor3_cars": floor_data.get(3, {}).get("car", 0),
-        "floor3_motorcycles": floor_data.get(3, {}).get("motorcycle", 0),
+        "floor3_cars": floor3_total,
+        "floor3_motorcycles": 0,
     }
 
     return render_template("garage-a.html", **context)
