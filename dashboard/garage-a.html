@@ -5,6 +5,22 @@
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Fields Garage - Parkageddon Dashboard</title>
     <link rel="icon" type="image/png" href="Images/favicon.png">
+
+    <!-- Conservative Content Security Policy (meta) to reduce XSS impact while keeping inline styles/scripts working.
+         Best practice: move inline CSS/JS to external files and set CSP via server headers, then remove 'unsafe-inline'. -->
+    <meta http-equiv="Content-Security-Policy" content="
+        default-src 'none';
+        script-src 'self' 'unsafe-inline';
+        style-src 'self' 'unsafe-inline';
+        img-src 'self' data:;
+        connect-src 'self';
+        font-src 'self';
+        frame-ancestors 'none';
+        object-src 'none';
+        base-uri 'self';
+    ">
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+
     <style>
         :root {
             --primary: #5A2D81; /* Lipscomb Purple */
@@ -56,15 +72,15 @@
         <a href="/">Home</a>
         <a href="/about">About</a>
         <a href="/feedback">Feedback</a>
-        <a href="https://lipscomb.edu/engineering">Fields</a>
-        <a href="https://lipscomb.edu">Lipscomb University</a>
+        <a href="https://lipscomb.edu/engineering" target="_blank" rel="noopener noreferrer">Fields</a>
+        <a href="https://lipscomb.edu" target="_blank" rel="noopener noreferrer">Lipscomb University</a>
     </nav>
 
     <main>
         <section class="card">
             <h2>Live Feed:</h2>
             <div class="live-feed">
-                <!-- Replace this with your camera embed or video stream -->
+                <!-- Replace this with the camera embed or video stream -->
                 Camera Feed Placeholder
             </div>
         </section>
@@ -125,24 +141,11 @@
 
     <script>
     // Polling snippet — fetches /api/current_counts every N seconds and updates elements on the page.
-    // How it updates:
-    // 1) If you add a mapping in `locationToElementId`, the script will use that mapping to update that element id.
-    // 2) Otherwise it will try sensible defaults:
-    //    - element with id "count-<location_id>"
-    //    - element with id "<location_id>"
-    //    - any element with data-location="<location_id>" (it will update its textContent)
-    //
-    // To wire a DB row to a page element, either:
-    // - Add a mapping below (e.g. 'entrance_1': 'floor1_cars'), or
-    // - Give the element an id like "count-entrance_1" or data-location="entrance_1".
-    //
-    // Example mapping:
-    //  const locationToElementId = { 'entrance_1': 'floor1_cars', 'entrance_2': 'floor2_cars' };
-    //
+    // Script updates use textContent (safe) and no innerHTML.
     (function() {
         const POLL_INTERVAL_MS = 3000;
 
-        // Map DB location_id -> element id on this page. Edit as you deploy to match your DB.
+        // Map DB location_id -> element id on this page. Edit as we deploy to match the DB.
         const locationToElementId = {
             // 'entrance_1': 'floor1_cars',
             // 'entrance_2': 'floor2_cars',
@@ -166,19 +169,14 @@
                     return;
                 }
                 const counts = await res.json();
-                // counts is expected to be an array of objects with at least {location_id, count, camera_name, last_update}
                 counts.forEach(c => {
                     const loc = c.location_id;
                     const val = (c.count != null) ? c.count : '';
-                    // 1) mapping
                     if (locationToElementId[loc]) {
                         updateElementTextById(locationToElementId[loc], val);
                     }
-                    // 2) id-based fallback: count-<location_id>
                     updateElementTextById('count-' + loc, val);
-                    // 3) id-based fallback: <location_id>
                     updateElementTextById(loc, val);
-                    // 4) data-location attr fallback
                     updateElementsByDataLocation(loc, val);
                 });
             } catch (err) {
