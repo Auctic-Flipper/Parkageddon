@@ -1,6 +1,7 @@
 import os
-from flask import Blueprint, render_template, current_app
+from flask import Blueprint, render_template
 from dotenv import load_dotenv
+from sqlalchemy import func
 
 from models.schemas import db, CurrentCount
 
@@ -41,9 +42,9 @@ def garage_a_dashboard():
     total_ids = _parse_list_env("GARAGE_A_TOTAL_LOCATIONS")
 
     # Compute per-floor sums
-    floor1_total = _sum_locations(floor1_ids) if floor1_ids else 0
-    floor2_total = _sum_locations(floor2_ids) if floor2_ids else 0
-    floor3_total = _sum_locations(floor3_ids) if floor3_ids else 0
+    floor1_total = _sum_locations(floor1_ids) 
+    floor2_total = _sum_locations(floor2_ids) 
+    floor3_total = _sum_locations(floor3_ids) 
 
     # Compute grand total
     if total_ids:
@@ -54,7 +55,7 @@ def garage_a_dashboard():
             total_cars = floor1_total + floor2_total + floor3_total
         else:
             # fallback: sum all current_counts
-            total_cars = db.session.query(CurrentCount).with_entities(db.func.sum(CurrentCount.count)).scalar() or 0
+            total_cars = db.session.query(func.coalesce(func.sum(CurrentCount.count), 0)).scalar() or 0
 
     # NOTE: current_counts schema does not include vehicle type separation (car vs motorcycle).
     # If our data doesn't separate motorcycles by location_id, set motorcycles to 0 (or change mapping).
