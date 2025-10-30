@@ -1,0 +1,46 @@
+:root {
+    --primary: #5A2D81; /* Lipscomb Purple */
+    --accent: gold;
+    --body-font: Arial, sans-serif;
+    --container-max: 1100px;
+    --muted: #444;
+    --card-bg: #fff;
+    --card-border: #e6e6e6;
+}
+
+html,body { height: 100%; margin: 0; padding: 0; font-family: var(--body-font); color: #111; background: #fafafa; }
+header { background-color: var(--primary); color: var(--accent); text-align: center; padding: 1rem; transition: opacity 0.3s ease, visibility 0.3s ease; }
+header h1 { color: var(--accent); }
+header.hidden { opacity: 0; visibility: hidden; height: 0; padding: 0; overflow: hidden; }
+nav { display:flex; justify-content:center; gap:2rem; background: var(--primary); padding:0.5rem; position: sticky; top:0; z-index:1000; }
+nav a { color: var(--accent); font-weight:bold; text-decoration:none; font-size:1.05rem; }
+nav a:hover { text-decoration: underline; }
+
+main { max-width: var(--container-max); margin: 2rem auto; padding: 1rem; padding-bottom: 3rem; }
+.hero { background: linear-gradient(180deg, rgba(90,45,129,0.05), rgba(90,45,129,0.02)); border-radius:8px; padding:1.25rem; margin-bottom:1.25rem; border:1px solid var(--card-border); }
+h1 { margin: 0 0 0.25rem 0; color: var(--primary); }
+p.lead { margin:0; color: var(--muted); font-size:1.05rem; }
+
+.grid { display:grid; grid-template-columns: 1fr; gap: 1rem; margin-top: 1rem; }
+@media(min-width:900px){ .grid { grid-template-columns: 1fr 380px; } }
+
+.card { background: var(--card-bg); border:1px solid var(--card-border); border-radius:8px; padding:1rem; box-shadow: 0 1px 2px rgba(0,0,0,0.03); }
+.card h2 { margin-top: 0; color: var(--primary); }
+.muted { color: var(--muted); line-height:1.5; }
+
+.arch { display:flex; flex-direction:column; gap:.75rem; align-items:center; justify-content:center; padding:0.75rem; }
+.arch .node { width: 100%; max-width: 320px; padding:0.6rem 0.8rem; border-radius:6px; border:1px solid var(--card-border); background:#fff; text-align:center; font-weight:600; color:#222; }
+.arch .arrow { font-size:1.25rem; color:var(--muted); }
+
+ul { margin:0.5rem 0 0 1.25rem; color:var(--muted); }
+.small { font-size:0.92rem; color:var(--muted); }
+
+footer { background-color: var(--primary); color: var(--accent); text-align:center; padding:0.5rem; font-weight:bold; font-size:1.1rem; position: fixed; bottom:0; left:0; width:100%; z-index:1000; }
+
+a.button { display:inline-block; background: var(--primary); color: var(--accent); padding:0.25rem 0.5rem; border-radius:32px; text-decoration:none; font-weight:bold; }
+a.contact-button {
+    position: relative;
+    top: 3px;
+    left: 3px;
+}
+.credits { font-size:0.95rem; color:var(--muted); }
