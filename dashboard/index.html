@@ -6,21 +6,6 @@
     <title>Parkageddon Dashboard</title>
     <link rel="icon" type="image/png" href="Images/favicon.png">
     <link rel="stylesheet" href="CSS/index.css">
-
-    <!-- Conservative CSP: inline styles/scripts allowed for backwards compatibility.
-         Move inline CSS/JS to external files and set a stricter CSP when possible.
-    -->
-    <meta http-equiv="Content-Security-Policy" content="
-        default-src 'none';
-        script-src 'self' 'unsafe-inline';
-        style-src 'self' 'unsafe-inline';
-        img-src 'self' data:;
-        connect-src 'self';
-        font-src 'self';
-        object-src 'none';
-        base-uri 'self';
-    ">
-
     <meta name="referrer" content="strict-origin-when-cross-origin" />
 </head>
 <body>
@@ -70,17 +55,6 @@
         &copy; 2025 Lipscomb University
     </footer>
 
-    <script>
-        const header = document.getElementById('main-header');
-        function toggleHeader() {
-            if (window.scrollY > 50) {
-                header.classList.add('hidden');
-            } else {
-                header.classList.remove('hidden');
-            }
-        }
-        window.addEventListener('scroll', toggleHeader);
-        window.addEventListener('load', toggleHeader);
-    </script>
+    <script src="JS/index.js"></script>
 </body>
 </html>
