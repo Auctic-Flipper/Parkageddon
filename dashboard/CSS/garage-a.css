@@ -1,0 +1,39 @@
+:root {
+    --primary: #5A2D81; /* Lipscomb Purple */
+    --accent: gold;
+    --body-font: Arial, sans-serif;
+    --container-max: 1100px;
+    --muted: #444;
+    --card-bg: #fff;
+    --card-border: #e6e6e6;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body { height: 100%; margin: 0; padding: 0; font-family: var(--body-font); color: #111; background: #fafafa; }
+header { background-color: var(--primary); color: var(--accent); text-align: center; padding: 1rem; }
+header h1 { color: var(--accent); }
+header.hidden { opacity: 0; visibility: hidden; height: 0; padding: 0; overflow: hidden; }
+
+nav { display: flex; justify-content: center; gap: 2rem; background: var(--primary); padding: 0.5rem; position: sticky; top: 0; z-index: 1000; }
+nav a { color: var(--accent); font-weight: bold; text-decoration: none; font-size: 1.05rem; }
+nav a:hover { text-decoration: underline; }
+
+main { max-width: var(--container-max); margin: 2rem auto; padding: 1rem; padding-bottom: 3rem; }
+h1 { margin: 0 0 0.5rem 0; color: var(--primary); }
+h2 { color: var(--primary); margin-top: 1rem; margin-bottom: 0.5rem; }
+
+.card { background: var(--card-bg); border:1px solid var(--card-border); border-radius:8px; padding:1rem; box-shadow: 0 1px 2px rgba(0,0,0,0.03); margin-bottom:1rem; }
+
+.live-feed { width: 100%; max-width: 800px; height: 450px; border:1px solid var(--card-border); border-radius:8px; background:#000; display:flex; align-items:center; justify-content:center; color:#fff; font-size:1.2rem; margin-top: 0.5rem; margin-bottom: 2rem; }
+
+table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+th, td { border: 1px solid var(--card-border); padding: 0.75rem; text-align: center; }
+th { background-color: var(--primary); color: var(--accent); font-weight: bold; }
+td { background-color: #fff; }
+
+footer { background-color: var(--primary); color: var(--accent); text-align:center; padding:0.5rem; font-weight:bold; font-size:1.1rem; position: fixed; bottom:0; left:0; width:100%; z-index:1000; }
+
+@media(max-width:900px){
+    .live-feed { height: 250px; }
+}
