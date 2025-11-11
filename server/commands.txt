@@ -1,7 +1,12 @@
 In the terminal:
-
+- mkdir -p ~/Documents/Github
+- cd ~/Documents/Github
+- git clone https://github.com/Auctic-Flipper/Parkageddon.git
+- sudo apt update && sudo apt install python3 python3-pip -y
 - cd ~/Documents/Github/Parkageddon/server
+- python3 -m venv venv
 - source venv/bin/activate
+- pip install -r requirements.txt
 - waitress-serve --listen=127.0.0.1:8000 --call "app:create_app"
 
 In a different terminal (Make sure you've downloaded the certificates and the nginx configuration first):
@@ -21,4 +26,11 @@ In a different terminal (Make sure you've downloaded the certificates and the ng
 
 You can now open your browser and connect to https://<private_ip_here> (Browswers like Firefox have a separate certificate store. You can import ca.crt on such browsers)
 
-You can update your firewall rules to allow inbound connections for 443/tcp and 8080/tcp if you want to host this on your network.
+You can update your firewall rules to allow inbound connections for 443/tcp and 8080/tcp if you want to host this on your network:
+
+- sudo ufw enable
+- sudo ufw default deny incoming
+- sudo ufw default allow outgoing
+- sudo ufw allow 443/tcp
+- sudo ufw allow 8080/tcp
+- sudo ufw reload
