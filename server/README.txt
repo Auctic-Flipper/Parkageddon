@@ -9,7 +9,7 @@ In the terminal:
 - pip install -r requirements.txt
 - waitress-serve --listen=127.0.0.1:8000 --call "app:create_app"
 
-In a different terminal (Make sure you've downloaded the certificates and the nginx configuration first):
+In a different terminal (Make sure you've downloaded the certificates and the nginx configuration first. Ask Auctic-Flipper for the password to the .7z archive):
 
 - sudo apt update && sudo apt install nginx -y
 - sudo cp ~/Downloads/ca.crt /usr/local/share/ca-certificates/
