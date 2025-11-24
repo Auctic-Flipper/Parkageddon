@@ -27,7 +27,7 @@ opencv-python==4.8.1.78
 numpy>=1.26.0
 
 # YOLO/AI
-ultralytics==8.3.225
+ultralytics==8.3.231
 torch>=2.4.0
 torchvision>=0.19.0
 
