@@ -5,7 +5,7 @@ Flask==3.1.2
 Flask-SQLAlchemy==3.1.1
 SQLAlchemy==2.0.44
 psycopg2-binary==2.9.11
-greenlet==3.2.4
+greenlet==3.3.0
 
 # Template engine and Flask dependencies
 Jinja2==3.1.6
