@@ -10,7 +10,7 @@ greenlet==3.2.4
 # Template engine and Flask dependencies
 Jinja2==3.1.6
 MarkupSafe==3.0.3
-Werkzeug==3.1.4
+Werkzeug==3.1.5
 itsdangerous==2.2.0
 click==8.3.1
 blinker==1.9.0
