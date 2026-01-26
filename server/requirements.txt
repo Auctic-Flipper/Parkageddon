@@ -3,7 +3,7 @@ Flask==3.1.2
 
 # Database ORM and driver
 Flask-SQLAlchemy==3.1.1
-SQLAlchemy==2.0.44
+SQLAlchemy==2.0.46
 psycopg2-binary==2.9.11
 greenlet==3.2.4
 
