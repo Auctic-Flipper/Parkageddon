@@ -23,7 +23,7 @@ typing_extensions==4.15.0
 waitress
 
 # Core Dependencies
-opencv-python==4.13.0.90
+opencv-python==4.13.0.92
 numpy>=1.26.0
 
 # YOLO/AI
