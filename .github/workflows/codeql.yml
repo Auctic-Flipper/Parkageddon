@@ -10,9 +10,6 @@ on:
 
 jobs:
   analyze:
-    # Skip on private repos to avoid upload failures without GHAS.
-    # Remove this line after making the repo public or enabling GHAS in an org.
-    if: ${{ github.event.repository.private == false }}
     name: Analyze
     runs-on: ubuntu-latest
     permissions:
