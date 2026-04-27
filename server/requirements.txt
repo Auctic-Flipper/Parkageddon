@@ -24,7 +24,7 @@ waitress
 
 # Core Dependencies
 opencv-python==4.13.0.92
-numpy>=1.26.0
+numpy>=2.4.4
 
 # YOLO/AI
 ultralytics==8.4.21
