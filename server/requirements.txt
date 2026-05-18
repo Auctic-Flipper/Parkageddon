@@ -12,7 +12,7 @@ Jinja2==3.1.6
 MarkupSafe==3.0.3
 Werkzeug==3.1.8
 itsdangerous==2.2.0
-click==8.3.1
+click==8.4.0
 blinker==1.9.0
 
 # Environment variable management
