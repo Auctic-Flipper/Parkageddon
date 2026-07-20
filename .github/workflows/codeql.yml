@@ -32,7 +32,7 @@ jobs:
 
       # Python typically doesn't need a build; optional dependency install can help analysis context
       - name: Set up Python
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v7
         with:
           python-version: "3.x"
 
